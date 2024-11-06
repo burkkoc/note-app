@@ -7,7 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\NoteApp.DataAccess\NoteApp.DataAccess.csproj" />
+    <ProjectReference Include="..\NoteApp.Core\NoteApp.Core.csproj" />
+    <ProjectReference Include="..\NoteApp.Entities\NoteApp.Entities.csproj" />
   </ItemGroup>
 
 </Project>

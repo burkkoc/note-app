@@ -20,5 +20,7 @@ namespace NoteApp.DataAccess.Contexts
         public new virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Note> Notes { get; set; }
 
+       
+
     }
 }

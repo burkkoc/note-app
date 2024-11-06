@@ -12,7 +12,5 @@ namespace NoteApp.Entities.DbSets
     {
         public Guid UserId { get; set; }
         public virtual User User { get; set; } = null!;
-
-        //ihtiyaca göre prop eklenebilir
     }
 }

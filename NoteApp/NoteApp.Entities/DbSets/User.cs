@@ -11,7 +11,5 @@ namespace NoteApp.Entities.DbSets
     public class User : BaseUser
     {
         public virtual ICollection<Note>? Notes { get; set; }
-
-        //ihtiyaca göre prop eklenebilir
     }
 }

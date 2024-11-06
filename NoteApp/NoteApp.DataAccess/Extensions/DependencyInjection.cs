@@ -22,7 +22,6 @@ namespace NoteApp.DataAccess.Extensions
             });
             services.AddIdentity<IdentityUser, IdentityRole>(option =>
             {
-
                 option.SignIn.RequireConfirmedEmail = true;
             }).AddEntityFrameworkStores<NoteAppDbContext>().AddDefaultTokenProviders();
 
