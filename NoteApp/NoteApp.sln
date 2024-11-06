@@ -3,9 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34714.143
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteApp.Api", "NoteApp\NoteApp.Api.csproj", "{B3F8229D-6D6A-497F-B268-79A8607F6425}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteApp.Interfaces", "NoteApp.Interfaces\NoteApp.Interfaces.csproj", "{38334C32-8F19-46B9-AC23-A8E6F2A8E91F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteApp.Interfaces", "NoteApp.Interfaces\NoteApp.Interfaces.csproj", "{38334C32-8F19-46B9-AC23-A8E6F2A8E91F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteApp.Core", "NoteApp.Core\NoteApp.Core.csproj", "{49FB748D-1557-4D83-8307-842047BFF5F0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteApp.DataAccess", "NoteApp.DataAccess\NoteApp.DataAccess.csproj", "{EEEE400D-1C1F-4130-A912-419F78728C73}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteApp.Entities", "NoteApp.Entities\NoteApp.Entities.csproj", "{662E7DDE-D8D0-4C6B-804A-C5B87E32D42A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteApp.DataAccessEFCore", "NoteApp.DataAccessEFCore\NoteApp.DataAccessEFCore.csproj", "{47A49973-2173-4B90-A489-B478C2371631}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteApp.Api", "NoteApp.Api\NoteApp.Api.csproj", "{6A69623F-1434-41BD-86B0-343389558858}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,14 +21,30 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B3F8229D-6D6A-497F-B268-79A8607F6425}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B3F8229D-6D6A-497F-B268-79A8607F6425}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B3F8229D-6D6A-497F-B268-79A8607F6425}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B3F8229D-6D6A-497F-B268-79A8607F6425}.Release|Any CPU.Build.0 = Release|Any CPU
 		{38334C32-8F19-46B9-AC23-A8E6F2A8E91F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{38334C32-8F19-46B9-AC23-A8E6F2A8E91F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{38334C32-8F19-46B9-AC23-A8E6F2A8E91F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{38334C32-8F19-46B9-AC23-A8E6F2A8E91F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49FB748D-1557-4D83-8307-842047BFF5F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49FB748D-1557-4D83-8307-842047BFF5F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49FB748D-1557-4D83-8307-842047BFF5F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49FB748D-1557-4D83-8307-842047BFF5F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEEE400D-1C1F-4130-A912-419F78728C73}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEEE400D-1C1F-4130-A912-419F78728C73}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEEE400D-1C1F-4130-A912-419F78728C73}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEEE400D-1C1F-4130-A912-419F78728C73}.Release|Any CPU.Build.0 = Release|Any CPU
+		{662E7DDE-D8D0-4C6B-804A-C5B87E32D42A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{662E7DDE-D8D0-4C6B-804A-C5B87E32D42A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{662E7DDE-D8D0-4C6B-804A-C5B87E32D42A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{662E7DDE-D8D0-4C6B-804A-C5B87E32D42A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{47A49973-2173-4B90-A489-B478C2371631}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47A49973-2173-4B90-A489-B478C2371631}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47A49973-2173-4B90-A489-B478C2371631}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47A49973-2173-4B90-A489-B478C2371631}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A69623F-1434-41BD-86B0-343389558858}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A69623F-1434-41BD-86B0-343389558858}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A69623F-1434-41BD-86B0-343389558858}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A69623F-1434-41BD-86B0-343389558858}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
