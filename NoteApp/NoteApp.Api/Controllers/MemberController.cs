@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using NoteApp.Business.Features.Members.Commands.DeleteMember;
 using NoteApp.Business.Features.Users.Commands;
 using NoteApp.Business.Features.Users.Queries;
 using NoteApp.DTOs.User;
@@ -48,6 +49,20 @@ namespace NoteApp.Api.Controllers
             catch (Exception ex)
             {
                 return BadRequest(new { message = "Failed to create user: ", error = ex.Message });
+            }
+        }
+
+        [HttpDelete("Delete")]
+        public async Task<IActionResult> Delete(Guid Id)
+        {
+            try
+            {
+                var result = await _mediator.Send(new DeleteMemberCommand { MemberId = Id});
+                return Ok("Success.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Failed to delete user: ", error = ex.Message });
             }
         }
 

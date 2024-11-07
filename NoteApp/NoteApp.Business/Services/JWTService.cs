@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using NoteApp.Core.Entities.Interfaces;
+using NoteApp.DataAccess.Contexts;
 using NoteApp.DTOs.Authentication;
 using System;
 using System.Collections.Generic;
@@ -19,27 +22,37 @@ namespace NoteApp.Business.Services
     {
         private readonly IConfiguration _configuration;
         private readonly JWTOption _options;
+        private readonly UserManager<IdentityUser> _userManager;
+        //private readonly NoteAppDbContext _noteAppDbContext;
 
-        public JWTService(IConfiguration configuration, IOptions<JWTOption> options)
+        public JWTService(IConfiguration configuration, IOptions<JWTOption> options, UserManager<IdentityUser> userManager/*, NoteAppDbContext noteAppDbContext*/)
         {
             _configuration = configuration;
             _options = options.Value ?? throw new ArgumentNullException(nameof(options));
+            //_noteAppDbContext= noteAppDbContext;
+            _userManager = userManager;
         }
 
-        public string GenerateToken(IdentityUser user)
+        public async Task<string> GenerateToken(IdentityUser user)
         {
 
             var securityKey = Encoding.UTF8.GetBytes(_options.Key);
             var credentials = new SigningCredentials(new SymmetricSecurityKey(securityKey), SecurityAlgorithms.HmacSha256);
+            var userClaims = await _userManager.GetClaimsAsync(user);
+            //var userClaims = _noteAppDbContext.UserClaims.Where(c => c.UserId == user.Id).ToList();
 
-
-            var claims = new[]
+            var claims = new List<Claim>
             {
-            new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
-            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
+            claims.AddRange(userClaims);
 
+            //foreach (var claim in userClaims)
+            //{
+            //    claims.Add(new Claim(claim.Type, claim.ClaimValue));
+            //}
 
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],

@@ -30,7 +30,7 @@ namespace NoteApp.Api.Extensions
                
             }).AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, opt =>
             {
-                opt.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+                opt.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidIssuer = jwtOptions.Issuer,
                     ValidAudience = jwtOptions.Audience,
