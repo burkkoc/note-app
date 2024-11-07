@@ -8,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace NoteApp.Business.Features.Users.Queries
 {
-    public class GetUserByIdQuery : IRequest<MemberDTO>
+    public class GetMemberByIdQuery : IRequest<MemberDTO>
     {
         public string Id { get; }
-        public GetUserByIdQuery(string userId)
+        public GetMemberByIdQuery(string userId)
         {
             Id = userId;
         }

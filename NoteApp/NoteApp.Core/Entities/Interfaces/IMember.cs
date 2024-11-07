@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NoteApp.Core.Entities.Interfaces
 {
-    public interface IUserInformation
+    public interface IMember
     {
         string? IdentityId { get; set; }
         string FirstName { get; set; }

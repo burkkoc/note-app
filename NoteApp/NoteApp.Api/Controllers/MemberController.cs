@@ -1,6 +1,9 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using NoteApp.Business.Features.Users.Commands;
 using NoteApp.Business.Features.Users.Queries;
+using NoteApp.DTOs.User;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -12,9 +15,11 @@ namespace NoteApp.Api.Controllers
     {
 
         private readonly IMediator _mediator;
-        public MemberController(IMediator mediator)
+        private readonly IMapper _mapper;
+        public MemberController(IMediator mediator, IMapper mapper)
         {
             _mediator = mediator;
+            _mapper = mapper;
         }
 
         [HttpGet("GetById")]
@@ -22,7 +27,7 @@ namespace NoteApp.Api.Controllers
         {
             try
             {
-                var query = new GetUserByIdQuery(Id);
+                var query = new GetMemberByIdQuery(Id);
                 var user = await _mediator.Send(query);
                 return Ok(user);
             }
@@ -33,12 +38,11 @@ namespace NoteApp.Api.Controllers
         }
 
         [HttpPost("Create")]
-        public async Task<IActionResult> Create(string Id)
+        public async Task<IActionResult> Create([FromForm] MemberCreateDTO createDTO)
         {
             try
             {
-                var query = new GetUserByIdQuery(Id);
-                var user = await _mediator.Send(query);
+                var user = await _mediator.Send(_mapper.Map<CreateMemberCommand>(createDTO));
                 return Ok(user);
             }
             catch (Exception ex)

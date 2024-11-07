@@ -23,8 +23,8 @@ namespace NoteApp.DataAccessEFCore.Extensions
         {
             services.AddScoped<NoteReadRepository>();
             services.AddScoped<NoteWriteRepository>();
-            services.AddScoped<UserReadRepository>();
-            services.AddScoped<UserWriteRepository>();
+            services.AddScoped<MemberReadRepository>();
+            services.AddScoped<MemberWriteRepository>();
 
             return services;
         }

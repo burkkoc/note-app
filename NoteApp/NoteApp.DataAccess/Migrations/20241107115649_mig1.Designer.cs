@@ -12,7 +12,7 @@ using NoteApp.DataAccess.Contexts;
 namespace NoteApp.DataAccess.Migrations
 {
     [DbContext(typeof(NoteAppDbContext))]
-    [Migration("20241107003546_mig1")]
+    [Migration("20241107115649_mig1")]
     partial class mig1
     {
         /// <inheritdoc />
@@ -247,7 +247,7 @@ namespace NoteApp.DataAccess.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -276,6 +276,9 @@ namespace NoteApp.DataAccess.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("Member");
                 });
