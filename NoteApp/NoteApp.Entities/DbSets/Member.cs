@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace NoteApp.Entities.DbSets
 {
-    public class User : BaseUser
+    public class Member : BaseUser
     {
         public virtual ICollection<Note>? Notes { get; set; }
     }

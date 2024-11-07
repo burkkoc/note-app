@@ -11,6 +11,6 @@ namespace NoteApp.Entities.DbSets
     public class Note : BaseNote
     {
         public Guid UserId { get; set; }
-        public virtual User User { get; set; } = null!;
+        public virtual Member UserInformation { get; set; } = null!;
     }
 }

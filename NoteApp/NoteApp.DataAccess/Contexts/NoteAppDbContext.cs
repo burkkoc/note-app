@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using NoteApp.Core.Enums;
 using NoteApp.Entities.DbSets;
 using System;
 using System.Collections.Generic;
@@ -17,10 +18,16 @@ namespace NoteApp.DataAccess.Contexts
         {
         }
 
-        public new virtual DbSet<User> Users { get; set; }
+        public virtual DbSet<Member> Member { get; set; }
         public virtual DbSet<Note> Notes { get; set; }
 
-       
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            
+            
+        }
 
     }
 }
