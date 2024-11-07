@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using NoteApp.Business.Features.Users.Queries;
+using NoteApp.Business.Features.Users.Queries.GetUserById;
 using NoteApp.DTOs.User;
 using NoteApp.Entities.DbSets;
 using NoteApp.Interfaces.Repositories;
