@@ -11,8 +11,4 @@
     <ProjectReference Include="..\NoteApp.Entities\NoteApp.Entities.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Authentication\" />
-  </ItemGroup>
-
 </Project>
