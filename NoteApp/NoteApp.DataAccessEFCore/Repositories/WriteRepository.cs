@@ -25,6 +25,7 @@ namespace NoteApp.DataAccessEFCore.Repositories
         public async Task<bool> AddAsync(T model)
         {
             model.CreatedDate = DateTime.Now;
+            model.Status = Core.Enums.Status.Added;
             EntityEntry<T> entityEntry = await Table.AddAsync(model);
             return entityEntry.State == EntityState.Added;
         }
@@ -37,6 +38,7 @@ namespace NoteApp.DataAccessEFCore.Repositories
 
         public bool Remove(T model)
         {
+            model.Status = Core.Enums.Status.Deleted;
             EntityEntry<T> entityEntry = Table.Remove(model);
             return entityEntry.State == EntityState.Deleted;
         }
@@ -45,6 +47,20 @@ namespace NoteApp.DataAccessEFCore.Repositories
         {
             T model = await Table.FindAsync(Guid.Parse(id));
             return Remove(model);
+
+        }
+
+        public bool SoftRemove(T model)
+        {
+            model.Status = Core.Enums.Status.Passive;
+            EntityEntry<T> entityEntry = Table.Update(model);
+            return entityEntry.State == EntityState.Deleted;
+
+        }
+        public async Task<bool> SoftRemoveAsync(string id)
+        {
+            T model = await Table.FindAsync(Guid.Parse(id));
+            return SoftRemove(model);
 
         }
 
