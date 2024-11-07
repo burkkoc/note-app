@@ -68,8 +68,12 @@ namespace NoteApp.DataAccessEFCore.Seeds
                 {
                     continue;
                 }
+                var role = new IdentityRole(roles[i])
+                {
+                    ConcurrencyStamp = Guid.NewGuid().ToString()
+                };
 
-                await roleManager.CreateAsync(new IdentityRole(roles[i]));
+                await roleManager.CreateAsync(role);
             }
         }
     }
