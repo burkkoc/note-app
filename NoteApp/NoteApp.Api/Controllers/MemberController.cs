@@ -53,7 +53,7 @@ namespace NoteApp.Api.Controllers
         }
 
         [HttpDelete("Delete")]
-        public async Task<IActionResult> Delete(Guid Id)
+        public async Task<IActionResult> Delete(Guid Id) //softdelete
         {
             try
             {
