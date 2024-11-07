@@ -46,8 +46,8 @@ namespace NoteApp.DataAccessEFCore.Seeds
                 EmailConfirmed = true
             };
 
-            adminUser.PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(adminUser, AdminPassword);
-            var result = await userManager.CreateAsync(adminUser, adminUser.PasswordHash);
+            //adminUser.PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(adminUser, AdminPassword);
+            var result = await userManager.CreateAsync(adminUser, AdminPassword);
             if (result.Succeeded)
             {
                 await userManager.AddToRoleAsync(adminUser, Enum.GetName(typeof(Roles), 1) ?? throw new NullReferenceException());
