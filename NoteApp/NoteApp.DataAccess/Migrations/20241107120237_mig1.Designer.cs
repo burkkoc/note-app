@@ -12,7 +12,7 @@ using NoteApp.DataAccess.Contexts;
 namespace NoteApp.DataAccess.Migrations
 {
     [DbContext(typeof(NoteAppDbContext))]
-    [Migration("20241107115649_mig1")]
+    [Migration("20241107120237_mig1")]
     partial class mig1
     {
         /// <inheritdoc />
