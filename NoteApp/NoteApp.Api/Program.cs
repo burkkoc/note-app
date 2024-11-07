@@ -1,3 +1,4 @@
+using NoteApp.Api.Extensions;
 using NoteApp.Business.Extensions;
 using NoteApp.DataAccess.Extensions;
 using NoteApp.DataAccessEFCore.Extensions;
@@ -9,7 +10,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddDataAccessServices(builder.Configuration)
     .AddEFCoreServices(builder.Configuration)
-    .AddBusinessServices();
+    .AddBusinessServices()
+    .AddIdentityConfiguration(builder.Configuration)
+    .AddSwaggerConfiguration();
     
 
 
@@ -27,7 +30,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
