@@ -11,8 +11,6 @@ namespace NoteApp.Core.Enums
     {
         Added = 1,
         Modified,
-        Deleted,
-        Active,
         Passive
     }
 }
