@@ -2,12 +2,14 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NoteApp.Core.Auth;
 using NoteApp.Core.Enums;
 using NoteApp.DataAccess.Contexts;
 using NoteApp.Entities.DbSets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -51,6 +53,7 @@ namespace NoteApp.DataAccessEFCore.Seeds
             if (result.Succeeded)
             {
                 await userManager.AddToRoleAsync(adminUser, Enum.GetName(typeof(Roles), 1) ?? throw new NullReferenceException());
+                await AddClaims(userManager, adminUser);
             }
             //var adminRoleId = context.Roles.FirstOrDefault(role => role.Name == Roles.Admin.ToString())!.Id;
 
@@ -74,6 +77,26 @@ namespace NoteApp.DataAccessEFCore.Seeds
                 };
 
                 await roleManager.CreateAsync(role);
+            }
+        }
+
+        private static async Task AddClaims(UserManager<IdentityUser> userManager, IdentityUser adminUser)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Role, Roles.Admin.ToString()),
+                new Claim(CustomClaims.CanCreate, "true"),
+                new Claim(CustomClaims.CanEdit, "true"),
+                new Claim(CustomClaims.CanDelete, "true"),
+            };
+
+            foreach (var claim in claims)
+            {
+                var existingClaim = await userManager.GetClaimsAsync(adminUser);
+                if (!existingClaim.Any(c => c.Type == claim.Type && c.Value == claim.Value))
+                {
+                    await userManager.AddClaimAsync(adminUser, claim);
+                }
             }
         }
     }
