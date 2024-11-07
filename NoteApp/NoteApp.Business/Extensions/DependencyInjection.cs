@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NoteApp.Business.Extensions.Mapper;
+using NoteApp.Business.Services;
 using NoteApp.DataAccess.Contexts;
 using NoteApp.DataAccessEFCore.Repositories;
 using NoteApp.Interfaces.Repositories;
@@ -21,6 +22,8 @@ namespace NoteApp.Business.Extensions
             //services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
             services.AddScoped(typeof(IReadRepository<>), typeof(ReadRepository<>));
+            services.AddScoped<JWTService>();
+            services.AddScoped<PasswordService>();
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
             AutoMapperConfig.RegisterMappings(services);
             return services;
