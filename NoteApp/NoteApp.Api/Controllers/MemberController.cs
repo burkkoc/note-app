@@ -33,7 +33,7 @@ namespace NoteApp.Api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Failed to retrieve user", error = ex.Message });
+                return BadRequest(new { message = "Failed to retrieve user: ", error = ex.Message });
             }
         }
 
@@ -42,12 +42,12 @@ namespace NoteApp.Api.Controllers
         {
             try
             {
-                var user = await _mediator.Send(_mapper.Map<CreateMemberCommand>(createDTO));
-                return Ok(user);
+                var result = await _mediator.Send(_mapper.Map<CreateMemberCommand>(createDTO));
+                return Ok("Success.");
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Failed to retrieve user", error = ex.Message });
+                return BadRequest(new { message = "Failed to create user: ", error = ex.Message });
             }
         }
 
