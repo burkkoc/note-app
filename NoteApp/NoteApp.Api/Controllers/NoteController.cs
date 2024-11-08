@@ -17,11 +17,9 @@ namespace NoteApp.Api.Controllers
     public class NoteController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly IMapper _mapper;
-        public NoteController(IMediator mediator, IMapper mapper)
+        public NoteController(IMediator mediator)
         {
             _mediator = mediator;
-            _mapper = mapper;
         }
 
 
