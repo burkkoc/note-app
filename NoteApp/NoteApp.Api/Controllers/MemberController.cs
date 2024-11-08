@@ -30,8 +30,8 @@ namespace NoteApp.Api.Controllers
         {
             try
             {
-                var user = await _mediator.Send(new GetMemberByIdQuery(Id));
-                return Ok(user);
+                var member = await _mediator.Send(new GetMemberByIdQuery(Id));
+                return Ok(member);
             }
             catch (Exception ex)
             {
@@ -39,17 +39,17 @@ namespace NoteApp.Api.Controllers
             }
         }
 
-        [HttpGet("GetAllMembers")]
-        public async Task<IActionResult> GetAllMembers()
+        [HttpGet("GetAll")]
+        public async Task<IActionResult> GetAll()
         {
             try
             {
-                var users = await _mediator.Send(new GetAllMembersQuery());
-                return Ok(users);
+                var members = await _mediator.Send(new GetAllMembersQuery());
+                return Ok(members);
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Failed to retrieve user", errors = ex.InnerException?.Message ?? ex.Message });
+                return BadRequest(new { message = "Failed to retrieve member.", errors = ex.InnerException?.Message ?? ex.Message });
             }
         }
 
@@ -59,11 +59,11 @@ namespace NoteApp.Api.Controllers
             try
             {
                 var result = await _mediator.Send(_mapper.Map<CreateMemberCommand>(createDTO));
-                return Ok("User created.");
+                return Ok("Member created.");
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Failed to create user", errors = ex.InnerException?.Message ?? ex.Message });
+                return BadRequest(new { message = "Failed to create member.", errors = ex.InnerException?.Message ?? ex.Message });
             }
         }
 
@@ -73,11 +73,11 @@ namespace NoteApp.Api.Controllers
             try
             {
                 var result = await _mediator.Send(new DeleteMemberCommand(Id));
-                return Ok("User deleted.");
+                return Ok("Member deleted.");
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Failed to delete user", errors = ex.InnerException?.Message ?? ex.Message });
+                return BadRequest(new { message = "Failed to delete member.", errors = ex.InnerException?.Message ?? ex.Message });
             }
         }
 
@@ -87,11 +87,11 @@ namespace NoteApp.Api.Controllers
             try
             {
                 var result = await _mediator.Send(_mapper.Map<UpdateMemberCommand>(updateDTO));
-                return Ok("User updated.");
+                return Ok("Member updated.");
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Failed to update user", errors = ex.InnerException?.Message ?? ex.Message });
+                return BadRequest(new { message = "Failed to update member.", errors = ex.InnerException?.Message ?? ex.Message });
             }
         }
 

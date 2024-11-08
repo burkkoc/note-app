@@ -5,6 +5,7 @@ using NoteApp.Business.Features.Members.Commands.DeleteMember;
 using NoteApp.Business.Features.Members.Commands.EditMember;
 using NoteApp.Business.Features.Members.Queries.GetAllMembers;
 using NoteApp.Business.Features.Notes.Commands.CreateNote;
+using NoteApp.Business.Features.Notes.Queries.GetAllNotes;
 using NoteApp.Business.Features.Notes.Queries.GetNotesByIdentityId;
 using NoteApp.Business.Features.Users.Queries;
 using NoteApp.Core.Auth;
@@ -42,10 +43,13 @@ namespace NoteApp.Business.Features.Members.Pipelines
 
             if((request is GetMemberByIdQuery || request is GetAllMembersQuery) && !user.HasClaim(c=>c.Type == CustomClaims.CanReadAnyMember && c.Value == ClaimStates.Yes.ToString()))
             {
-                throw new UnauthorizedAccessException("You do NOT have permission for read member.");
+                throw new UnauthorizedAccessException("You do NOT have permission to read members.");
             }
 
-            
+            if (request is GetAllNotesQuery && !user.HasClaim(c => c.Type == CustomClaims.CanReadAnyNote && c.Value == ClaimStates.Yes.ToString()))
+            {
+                throw new UnauthorizedAccessException("You do NOT have permission to read all notes.");
+            }
 
 
             return await next();
