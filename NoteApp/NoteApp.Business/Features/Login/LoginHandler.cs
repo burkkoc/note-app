@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 using NoteApp.Business.Services;
+using NoteApp.Interfaces.BusinessServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,9 @@ namespace NoteApp.Business.Features.Login
     public class LoginHandler : IRequestHandler<LoginCommand, LoginResponse>
     {
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly JWTService _jwtService;
+        private readonly IJWTService _jwtService;
 
-        public LoginHandler(UserManager<IdentityUser> userManager,  JWTService jwtService)
+        public LoginHandler(UserManager<IdentityUser> userManager,  IJWTService jwtService)
         {
             _userManager = userManager;
             _jwtService = jwtService;

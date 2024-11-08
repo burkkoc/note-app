@@ -24,10 +24,6 @@ namespace NoteApp.DataAccessEFCore.Extensions
     {
         public static IServiceCollection AddEFCoreServices(this IServiceCollection services, IConfiguration configuration)
         {
-            //services.AddScoped<NoteReadRepository>();
-            //services.AddScoped<NoteWriteRepository>();
-            //services.AddScoped<MemberReadRepository>();
-            //services.AddScoped<MemberWriteRepository>();
             services.AddScoped<IMemberReadRepository, MemberReadRepository>();
             services.AddScoped<IMemberWriteRepository, MemberWriteRepository>();
             services.AddScoped<INoteReadRepository, NoteReadRepository>();

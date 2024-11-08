@@ -7,6 +7,8 @@ using NoteApp.Business.Features.Members.Pipelines;
 using NoteApp.Business.Services;
 using NoteApp.Core.Repositories.Abstracts;
 using NoteApp.DataAccess.Contexts;
+using NoteApp.DataAccessEFCore.Repositories;
+using NoteApp.Interfaces.BusinessServices;
 using NoteApp.Interfaces.Repositories;
 using System;
 using System.Collections.Generic;
@@ -21,7 +23,9 @@ namespace NoteApp.Business.Extensions
     {
         public static IServiceCollection AddBusinessServices(this IServiceCollection services)
         {
-            services.AddScoped<JWTService>();
+            services.AddScoped<IJWTService, JWTService>();
+
+            //services.AddScoped<JWTService>();
             services.AddScoped<PasswordService>();
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CommandBehavior<,>));
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));

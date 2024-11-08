@@ -12,6 +12,7 @@ using NoteApp.Interfaces.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,16 +21,14 @@ namespace NoteApp.Business.Features.Members.Commands.EditMember
     public class UpdateMemberHandler : IRequestHandler<UpdateMemberCommand, bool>
     {
 
-        private readonly JWTService _jwtService;
         private readonly IMemberWriteRepository _writeRepository;
         private readonly IMemberReadRepository _readRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IMapper _mapper;
         private readonly UserManager<IdentityUser> _userManager;
-        public UpdateMemberHandler(IMemberWriteRepository writeRepository, JWTService jwtService, IHttpContextAccessor httpContextAccessor, IMapper mapper, UserManager<IdentityUser> userManager, IMemberReadRepository readRepository)
+        public UpdateMemberHandler(IMemberWriteRepository writeRepository, IHttpContextAccessor httpContextAccessor, IMapper mapper, UserManager<IdentityUser> userManager, IMemberReadRepository readRepository)
         {
             _writeRepository = writeRepository;
-            _jwtService = jwtService;
             _httpContextAccessor = httpContextAccessor;
             _mapper = mapper;
             _userManager = userManager;
@@ -37,12 +36,8 @@ namespace NoteApp.Business.Features.Members.Commands.EditMember
         }
         public async Task<bool> Handle(UpdateMemberCommand request, CancellationToken cancellationToken)
         {
-            var claims = _jwtService.ValidateToken(_httpContextAccessor);
-            var isAuthorized = claims.HasClaim(claim => claim.Type == CustomClaims.CanEdit && claim.Value == ClaimStates.Yes.ToString());
-            if (!isAuthorized)
-                throw new UnauthorizedAccessException("You do NOT have permission.");
 
-            var modifierUsername = _jwtService.GetUsername(claims);
+            var modifierUsername = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? throw new ArgumentNullException();
             var member = await _readRepository.GetByIdAsync(request.Id.ToString());
 
             if(member == null)
