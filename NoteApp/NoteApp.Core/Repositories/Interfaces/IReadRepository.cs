@@ -1,4 +1,5 @@
 ﻿using NoteApp.Core.Entities.Base;
+using NoteApp.Core.Entities.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +11,13 @@ namespace NoteApp.Core.Repositories.Interfaces
 {
     public interface IReadRepository<T> : IRepository<T> where T : BaseEntity
     {
-        IQueryable<T> GetAll();
+        //IQueryable<T> GetAll();
 
         IQueryable<T> GetWhere(Expression<Func<T, bool>> exp);
 
         Task<T> GetSingleAsync(Expression<Func<T, bool>> exp);
         Task<T> GetByIdAsync(string Id);
+        Task<IEnumerable<T>> GetAllAsync(bool tracking = true);
+
     }
 }

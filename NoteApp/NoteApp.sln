@@ -15,9 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteApp.DataAccessEFCore", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteApp.Api", "NoteApp.Api\NoteApp.Api.csproj", "{6A69623F-1434-41BD-86B0-343389558858}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteApp.Business", "NoteApp.Business\NoteApp.Business.csproj", "{D7C0EAF4-DF2F-4033-A35D-6AEFD9DC0D61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteApp.Business", "NoteApp.Business\NoteApp.Business.csproj", "{D7C0EAF4-DF2F-4033-A35D-6AEFD9DC0D61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteApp.DTOs", "NoteApp.DTOs\NoteApp.DTOs.csproj", "{919776E3-EBD6-4694-85CE-56B1551CF578}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteApp.DTOs", "NoteApp.DTOs\NoteApp.DTOs.csproj", "{919776E3-EBD6-4694-85CE-56B1551CF578}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

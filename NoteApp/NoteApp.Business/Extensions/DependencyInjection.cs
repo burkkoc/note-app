@@ -25,6 +25,7 @@ namespace NoteApp.Business.Extensions
         {
             services.AddScoped<IJWTService, JWTService>();
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CommandBehavior<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(QueryBehavior<,>));
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
             AutoMapperConfig.RegisterMappings(services);
             return services;

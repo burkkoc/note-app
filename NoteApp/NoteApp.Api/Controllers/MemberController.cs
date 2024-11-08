@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using NoteApp.Business.Features.Members.Commands.DeleteMember;
 using NoteApp.Business.Features.Members.Commands.EditMember;
+using NoteApp.Business.Features.Members.Queries.GetAllMembers;
 using NoteApp.Business.Features.Users.Commands;
 using NoteApp.Business.Features.Users.Queries;
 using NoteApp.DTOs.User;
@@ -31,6 +32,20 @@ namespace NoteApp.Api.Controllers
             {
                 var user = await _mediator.Send(new GetMemberByIdQuery(Id));
                 return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Failed to retrieve user", errors = ex.InnerException?.Message ?? ex.Message });
+            }
+        }
+
+        [HttpGet("GetAllMembers")]
+        public async Task<IActionResult> GetAllMembers()
+        {
+            try
+            {
+                var users = await _mediator.Send(new GetAllMembersQuery());
+                return Ok(users);
             }
             catch (Exception ex)
             {

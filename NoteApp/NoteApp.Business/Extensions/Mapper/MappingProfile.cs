@@ -25,6 +25,7 @@ namespace NoteApp.Business.Extensions.Mapper
             CreateMap<GetMemberByIdQuery, MemberDTO>();
             CreateMap<MemberCreateDTO, CreateMemberCommand>();
             CreateMap<MemberUpdateDTO, UpdateMemberCommand>();
+            CreateMap<Member, MemberListDTO>();
 
             CreateMap<UpdateMemberCommand, Member>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore());

@@ -82,7 +82,13 @@ namespace NoteApp.DataAccessEFCore.Seeds
                 new Claim(CustomClaims.CanCreateMember, ClaimStates.Yes.ToString()),
                 new Claim(CustomClaims.CanEditMember, ClaimStates.Yes.ToString()),
                 new Claim(CustomClaims.CanDeleteMember, ClaimStates.Yes.ToString()),
-                new Claim(CustomClaims.CanReadNote, ClaimStates.Yes.ToString()),
+                new Claim(CustomClaims.CanReadAnyMember, ClaimStates.Yes.ToString()),
+                new Claim(CustomClaims.CanReadOwnNote, ClaimStates.Yes.ToString()),
+                new Claim(CustomClaims.CanDeleteOwnNote, ClaimStates.Yes.ToString()),
+                new Claim(CustomClaims.CanEditOwnNote, ClaimStates.Yes.ToString()),
+                new Claim(CustomClaims.CanCreateOwnNote, ClaimStates.Yes.ToString()),
+                new Claim(CustomClaims.CanReadAnyNote, ClaimStates.Yes.ToString()),
+                new Claim(CustomClaims.CanGivePermission, ClaimStates.Yes.ToString()),
             };
 
             foreach (var claim in claims)

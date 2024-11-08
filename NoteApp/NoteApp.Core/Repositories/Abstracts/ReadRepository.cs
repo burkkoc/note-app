@@ -10,6 +10,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using NoteApp.Core.Repositories.Interfaces;
+using NoteApp.Core.Enums;
 
 namespace NoteApp.Core.Repositories.Abstracts
 {
@@ -29,6 +30,7 @@ namespace NoteApp.Core.Repositories.Abstracts
 
         public IQueryable<T> GetAll() => Table;
 
+
         public async Task<T> GetByIdAsync(string id) => await Table.FindAsync(Guid.Parse(id));
 
 
@@ -36,5 +38,16 @@ namespace NoteApp.Core.Repositories.Abstracts
 
 
         public IQueryable<T> GetWhere(Expression<Func<T, bool>> exp) => Table.Where(exp);
+        public async Task<IEnumerable<T>> GetAllAsync(bool tracking = true)
+        {
+            return await GetAllActives(tracking).ToListAsync();
+        }
+        protected IQueryable<T> GetAllActives(bool tracking = true)
+        {
+            var values = _table.Where(x => x.Status != Status.Passive);
+
+            return tracking ? values : values.AsNoTracking();
+        }
+
     }
 }
