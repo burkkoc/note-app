@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using MediatR;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NoteApp.Business.Extensions.Mapper;
+using NoteApp.Business.Features.Members.Pipelines;
 using NoteApp.Business.Services;
+using NoteApp.Core.Repositories.Abstracts;
 using NoteApp.DataAccess.Contexts;
-using NoteApp.DataAccessEFCore.Repositories;
 using NoteApp.Interfaces.Repositories;
 using System;
 using System.Collections.Generic;
@@ -19,11 +21,9 @@ namespace NoteApp.Business.Extensions
     {
         public static IServiceCollection AddBusinessServices(this IServiceCollection services)
         {
-            //services.AddAutoMapper(Assembly.GetExecutingAssembly());
-
-            services.AddScoped(typeof(IReadRepository<>), typeof(ReadRepository<>));
             services.AddScoped<JWTService>();
             services.AddScoped<PasswordService>();
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CommandBehavior<,>));
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
             AutoMapperConfig.RegisterMappings(services);
             return services;
