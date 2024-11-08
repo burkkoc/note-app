@@ -11,18 +11,6 @@ namespace NoteApp.Api.Extensions
         {
             services.Configure<JWTOption>(configuration.GetSection("Jwt"));
             var jwtOptions = configuration.GetSection("Jwt").Get<JWTOption>();
-            services.AddSingleton<TokenValidationParameters>(serviceProvider =>
-            {
-                return new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidIssuer = jwtOptions.Issuer,
-                    ValidAudience = jwtOptions.Audience,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key)),
-                    ValidateLifetime = true
-                };
-            });
             services.AddAuthentication(opt =>
             {
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -35,6 +23,7 @@ namespace NoteApp.Api.Extensions
                     ValidIssuer = jwtOptions.Issuer,
                     ValidAudience = jwtOptions.Audience,
                     ValidateIssuerSigningKey = true,
+                    ValidateIssuer = true,
                     ValidateAudience = true, 
                     ValidateLifetime = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key ?? throw new ArgumentException("Security key cannot be null or empty.", nameof(jwtOptions.Key)))),
