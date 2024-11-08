@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
 using NoteApp.Business.Features.Users.Queries;
+using NoteApp.Core.Repositories.Interfaces;
+using NoteApp.DataAccessEFCore.Repositories.UserRepositories;
 using NoteApp.DTOs.User;
 using NoteApp.Entities.DbSets;
 using NoteApp.Interfaces.Repositories;
@@ -14,9 +16,9 @@ namespace NoteApp.Business.Features.Users.Handlers
 {
     public class GetMemberByIdHandler : IRequestHandler<GetMemberByIdQuery, MemberDTO>
     {
-        private readonly IReadRepository<Member> _memberReadRepository;
+        private readonly IMemberReadRepository _memberReadRepository;
         private readonly IMapper _mapper;
-        public GetMemberByIdHandler(IReadRepository<Member> memberReadRepository, IMapper mapper)
+        public GetMemberByIdHandler(IMemberReadRepository memberReadRepository, IMapper mapper)
         {
             _memberReadRepository = memberReadRepository;
             _mapper = mapper;
@@ -25,7 +27,7 @@ namespace NoteApp.Business.Features.Users.Handlers
 
         public async Task<MemberDTO> Handle(GetMemberByIdQuery request, CancellationToken cancellationToken)
         {
-            var user = await _memberReadRepository.GetByIdAsync(request.Id);
+            var user = await _memberReadRepository.GetByIdAsync(request.Id.ToString());
             if (user == null) throw new Exception("User not found.");
             return _mapper.Map<MemberDTO>(user);
 

@@ -13,7 +13,7 @@ using NoteApp.Core.Repositories.Interfaces;
 
 namespace NoteApp.Core.Repositories.Abstracts
 {
-    public abstract class WriteRepository<T> : IWriteRepositorys<T> where T : BaseEntity
+    public abstract class WriteRepository<T> : IWriteRepository<T> where T : BaseEntity
     {
         protected readonly IdentityDbContext<IdentityUser, IdentityRole, string> _context;
         protected readonly DbSet<T> _table;

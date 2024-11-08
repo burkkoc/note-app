@@ -20,11 +20,11 @@ namespace NoteApp.Business.Features.Users.Commands
     public class CreateMemberHandler : IRequestHandler<CreateMemberCommand, bool>
     {
         private readonly UserManager<IdentityUser> _userManager;
-        private readonly MemberWriteRepository _writeRepository;
+        private readonly IMemberWriteRepository _writeRepository;
         private readonly IMapper _mapper;
         private readonly PasswordService _passwordService;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public CreateMemberHandler(UserManager<IdentityUser> userManager, MemberWriteRepository writeRepository, PasswordService passwordService, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        public CreateMemberHandler(UserManager<IdentityUser> userManager, IMemberWriteRepository writeRepository, PasswordService passwordService, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _writeRepository = writeRepository;

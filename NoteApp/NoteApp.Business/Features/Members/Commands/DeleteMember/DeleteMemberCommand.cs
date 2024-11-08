@@ -11,6 +11,10 @@ namespace NoteApp.Business.Features.Members.Commands.DeleteMember
     public class DeleteMemberCommand : IRequest<bool>
     {
         public Guid MemberId { get; set; }
+        public DeleteMemberCommand(Guid id)
+        {
+            MemberId = id;
+        }
 
     }
 }

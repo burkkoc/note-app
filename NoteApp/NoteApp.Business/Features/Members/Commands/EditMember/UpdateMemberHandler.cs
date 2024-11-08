@@ -8,6 +8,7 @@ using NoteApp.Core.Enums;
 using NoteApp.DataAccessEFCore.Repositories.UserRepositories;
 using NoteApp.DTOs.User;
 using NoteApp.Entities.DbSets;
+using NoteApp.Interfaces.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,12 +21,12 @@ namespace NoteApp.Business.Features.Members.Commands.EditMember
     {
 
         private readonly JWTService _jwtService;
-        private readonly MemberWriteRepository _writeRepository;
-        private readonly MemberReadRepository _readRepository;
+        private readonly IMemberWriteRepository _writeRepository;
+        private readonly IMemberReadRepository _readRepository;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IMapper _mapper;
         private readonly UserManager<IdentityUser> _userManager;
-        public UpdateMemberHandler(MemberWriteRepository writeRepository, JWTService jwtService, IHttpContextAccessor httpContextAccessor, IMapper mapper, UserManager<IdentityUser> userManager, MemberReadRepository readRepository)
+        public UpdateMemberHandler(IMemberWriteRepository writeRepository, JWTService jwtService, IHttpContextAccessor httpContextAccessor, IMapper mapper, UserManager<IdentityUser> userManager, IMemberReadRepository readRepository)
         {
             _writeRepository = writeRepository;
             _jwtService = jwtService;

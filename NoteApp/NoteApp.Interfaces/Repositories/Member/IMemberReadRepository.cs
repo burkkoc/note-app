@@ -6,10 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NoteApp.Interfaces.Repositories
-{
-    public interface IMemberReadRepository
-    {
 
-    }
+public interface IMemberReadRepository : IReadRepository<Member>
+{
+
 }

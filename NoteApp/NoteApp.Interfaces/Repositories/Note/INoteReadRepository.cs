@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace NoteApp.Interfaces.Repositories
 {
-    public interface INoteReadRepository
+    public interface INoteReadRepository : IReadRepository<Note>
     {
 
     }

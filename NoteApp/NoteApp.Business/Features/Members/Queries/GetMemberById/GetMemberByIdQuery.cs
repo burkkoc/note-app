@@ -10,8 +10,8 @@ namespace NoteApp.Business.Features.Users.Queries
 {
     public class GetMemberByIdQuery : IRequest<MemberDTO>
     {
-        public string Id { get; }
-        public GetMemberByIdQuery(string userId)
+        public Guid Id { get; }
+        public GetMemberByIdQuery(Guid userId)
         {
             Id = userId;
         }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace NoteApp.DataAccessEFCore.Repositories.UserRepositories
 {
-    public class MemberWriteRepository : WriteRepository<Member>
+    public class MemberWriteRepository : WriteRepository<Member>, IMemberWriteRepository
     {
         public MemberWriteRepository(NoteAppDbContext context) : base(context)
         {

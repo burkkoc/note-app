@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace NoteApp.Interfaces.Repositories
 {
-    public interface IMemberWriteRepository
+    public interface IMemberWriteRepository : IWriteRepository<Member>
     {
 
     }

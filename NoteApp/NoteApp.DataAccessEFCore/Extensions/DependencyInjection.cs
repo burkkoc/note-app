@@ -2,10 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using NoteApp.Core.Repositories.Interfaces;
 using NoteApp.DataAccess.Contexts;
 using NoteApp.DataAccessEFCore.Repositories;
 using NoteApp.DataAccessEFCore.Repositories.UserRepositories;
 using NoteApp.DataAccessEFCore.Seeds;
+using NoteApp.Entities.DbSets;
+
 
 //using NoteApp.DataAccessEFCore.Seeds;
 using NoteApp.Interfaces.Repositories;
@@ -21,10 +24,14 @@ namespace NoteApp.DataAccessEFCore.Extensions
     {
         public static IServiceCollection AddEFCoreServices(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<NoteReadRepository>();
-            services.AddScoped<NoteWriteRepository>();
-            services.AddScoped<MemberReadRepository>();
-            services.AddScoped<MemberWriteRepository>();
+            //services.AddScoped<NoteReadRepository>();
+            //services.AddScoped<NoteWriteRepository>();
+            //services.AddScoped<MemberReadRepository>();
+            //services.AddScoped<MemberWriteRepository>();
+            services.AddScoped<IMemberReadRepository, MemberReadRepository>();
+            services.AddScoped<IMemberWriteRepository, MemberWriteRepository>();
+            services.AddScoped<INoteReadRepository, NoteReadRepository>();
+            services.AddScoped<INoteWriteRepository, NoteWriteRepository>();
 
             return services;
         }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace NoteApp.DataAccessEFCore.Repositories.UserRepositories
 {
-    public class MemberReadRepository : ReadRepository<Member>
+    public class MemberReadRepository : ReadRepository<Member>, IMemberReadRepository
     {
         public MemberReadRepository(NoteAppDbContext context) : base(context)
         {
