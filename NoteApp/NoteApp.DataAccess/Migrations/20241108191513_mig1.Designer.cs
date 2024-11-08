@@ -12,7 +12,7 @@ using NoteApp.DataAccess.Contexts;
 namespace NoteApp.DataAccess.Migrations
 {
     [DbContext(typeof(NoteAppDbContext))]
-    [Migration("20241108170534_mig1")]
+    [Migration("20241108191513_mig1")]
     partial class mig1
     {
         /// <inheritdoc />
@@ -281,7 +281,8 @@ namespace NoteApp.DataAccess.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.HasIndex("IdentityUserId");
+                    b.HasIndex("IdentityUserId")
+                        .IsUnique();
 
                     b.ToTable("Member");
                 });
@@ -309,6 +310,9 @@ namespace NoteApp.DataAccess.Migrations
                     b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("MemberId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("ModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
@@ -322,15 +326,9 @@ namespace NoteApp.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserInformationId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserInformationId");
+                    b.HasIndex("MemberId");
 
                     b.ToTable("Notes");
                 });
@@ -389,8 +387,8 @@ namespace NoteApp.DataAccess.Migrations
             modelBuilder.Entity("NoteApp.Entities.DbSets.Member", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
-                        .WithMany()
-                        .HasForeignKey("IdentityUserId")
+                        .WithOne()
+                        .HasForeignKey("NoteApp.Entities.DbSets.Member", "IdentityUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -399,13 +397,13 @@ namespace NoteApp.DataAccess.Migrations
 
             modelBuilder.Entity("NoteApp.Entities.DbSets.Note", b =>
                 {
-                    b.HasOne("NoteApp.Entities.DbSets.Member", "UserInformation")
+                    b.HasOne("NoteApp.Entities.DbSets.Member", "Member")
                         .WithMany("Notes")
-                        .HasForeignKey("UserInformationId")
+                        .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("UserInformation");
+                    b.Navigation("Member");
                 });
 
             modelBuilder.Entity("NoteApp.Entities.DbSets.Member", b =>

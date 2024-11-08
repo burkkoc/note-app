@@ -5,7 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using NoteApp.Core.Auth;
 using NoteApp.Core.Enums;
 using NoteApp.DataAccess.Contexts;
+using NoteApp.DataAccessEFCore.Repositories.UserRepositories;
 using NoteApp.Entities.DbSets;
+using NoteApp.Interfaces.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,19 +25,23 @@ namespace NoteApp.DataAccessEFCore.Seeds
         public static async Task SeedAsync(IServiceProvider serviceProvider, NoteAppDbContext context)
         {
             var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
+
             var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
             if (!await roleManager.RoleExistsAsync(Enum.GetName(typeof(Roles), 1) ?? throw new NullReferenceException()))
             {
                 await AddRoles(roleManager);
             }
-            
-           await AddAdmin(userManager, context);
+
+
+
+           await AddAdmin(userManager, serviceProvider);
             
             await Task.CompletedTask;
         }
 
-        private static async Task AddAdmin(UserManager<IdentityUser> userManager, NoteAppDbContext context)
+        private static async Task AddAdmin(UserManager<IdentityUser> userManager, IServiceProvider serviceProvider)
         {
+            var writeMemberRepository = serviceProvider.GetRequiredService<IMemberWriteRepository>();
             var adminUser = await userManager.FindByEmailAsync(AdminEmail);
             if(adminUser != null) { return; }
 
@@ -48,14 +54,32 @@ namespace NoteApp.DataAccessEFCore.Seeds
                 EmailConfirmed = true
             };
 
+            
             var result = await userManager.CreateAsync(adminUser, AdminPassword);
-            if (result.Succeeded)
+            if (result.Succeeded )
             {
+
                 await userManager.AddToRoleAsync(adminUser, Enum.GetName(typeof(Roles), 1) ?? throw new NullReferenceException());
                 await AddClaims(userManager, adminUser);
             }
+            await AddAsMember(writeMemberRepository, adminUser);
         }
+        private static async Task AddAsMember(IMemberWriteRepository writeRepository, IdentityUser identityUser)
+        {
+            Member adminMember = new()
+            {
+                Status = Status.Added,
+                Email = AdminEmail,
+                FirstName = AdminEmail.ToUpper(),
+                LastName = AdminEmail.ToUpper(),
+                Gender = true,
+                IdentityUser = identityUser,
 
+                CreatedBy = "System"
+            };
+            await writeRepository.AddAsync(adminMember);
+      await      writeRepository.SaveAsync();
+        }
         private static async Task AddRoles(RoleManager<IdentityRole> roleManager)
         {
             string[] roles = Enum.GetNames(typeof(Roles));

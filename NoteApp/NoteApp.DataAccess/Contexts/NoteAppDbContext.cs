@@ -22,7 +22,16 @@ namespace NoteApp.DataAccess.Contexts
         public virtual DbSet<Member> Member { get; set; }
         public virtual DbSet<Note> Notes { get; set; }
 
-      
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+
+            modelBuilder.Entity<Member>()
+                .HasOne(m => m.IdentityUser)
+                .WithOne()
+                .HasForeignKey<Member>(m => m.IdentityUserId);
+        }
 
     }
 }

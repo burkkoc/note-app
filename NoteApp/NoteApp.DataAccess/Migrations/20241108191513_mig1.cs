@@ -191,8 +191,7 @@ namespace NoteApp.DataAccess.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserInformationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MemberId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
                     CreatedBy = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -207,8 +206,8 @@ namespace NoteApp.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_Notes", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Notes_Member_UserInformationId",
-                        column: x => x.UserInformationId,
+                        name: "FK_Notes_Member_MemberId",
+                        column: x => x.MemberId,
                         principalTable: "Member",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -262,12 +261,13 @@ namespace NoteApp.DataAccess.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Member_IdentityUserId",
                 table: "Member",
-                column: "IdentityUserId");
+                column: "IdentityUserId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Notes_UserInformationId",
+                name: "IX_Notes_MemberId",
                 table: "Notes",
-                column: "UserInformationId");
+                column: "MemberId");
         }
 
         /// <inheritdoc />

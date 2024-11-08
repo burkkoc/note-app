@@ -14,6 +14,7 @@ namespace NoteApp.Core.Entities.Base
     [Index(nameof(Email), IsUnique = true)]
     public class BaseMember : BaseEntity, IMember
     {
+        [ForeignKey("IdentityId")]
         public string IdentityUserId { get; set; }
         public string FirstName { get; set; } = null!;
         public string LastName { get; set; } = null!;
