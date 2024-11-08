@@ -22,14 +22,12 @@ namespace NoteApp.Business.Features.Users.Commands
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IMemberWriteRepository _writeRepository;
         private readonly IMapper _mapper;
-        private readonly PasswordService _passwordService;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public CreateMemberHandler(UserManager<IdentityUser> userManager, IMemberWriteRepository writeRepository, PasswordService passwordService, IMapper mapper, IHttpContextAccessor httpContextAccessor)
+        public CreateMemberHandler(UserManager<IdentityUser> userManager, IMemberWriteRepository writeRepository, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _userManager = userManager;
             _writeRepository = writeRepository;
             _mapper = mapper;
-            _passwordService = passwordService;
             _httpContextAccessor = httpContextAccessor;
         }
         public async Task<bool> Handle(CreateMemberCommand request, CancellationToken cancellationToken)
@@ -41,7 +39,7 @@ namespace NoteApp.Business.Features.Users.Commands
             member.IdentityUserId = identityUser.Id;
             member.CreatedBy = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? throw new ArgumentNullException();
 
-            string pass = _passwordService.GenerateRandomPassword();
+            string pass = PasswordService.GenerateRandomPassword();
             var identityResult = await _userManager.CreateAsync(identityUser, pass);
             bool memberResult = await _writeRepository.AddAsync(member);
             if (!memberResult)

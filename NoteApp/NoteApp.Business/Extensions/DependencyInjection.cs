@@ -24,9 +24,6 @@ namespace NoteApp.Business.Extensions
         public static IServiceCollection AddBusinessServices(this IServiceCollection services)
         {
             services.AddScoped<IJWTService, JWTService>();
-
-            //services.AddScoped<JWTService>();
-            services.AddScoped<PasswordService>();
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(CommandBehavior<,>));
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies()));
             AutoMapperConfig.RegisterMappings(services);

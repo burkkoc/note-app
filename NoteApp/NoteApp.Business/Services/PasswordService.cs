@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace NoteApp.Business.Services
 {
-    public class PasswordService
+    public static class PasswordService
     {
-        public string GenerateRandomPassword()
+        public static string GenerateRandomPassword()
         {
             var random = new Random();
             const string uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
