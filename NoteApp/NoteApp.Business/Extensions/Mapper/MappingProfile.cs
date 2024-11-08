@@ -49,7 +49,7 @@ namespace NoteApp.Business.Extensions.Mapper
 
 
             CreateMap<CreateNoteCommand, Note>();
-
+            CreateMap<Note, NoteListDTO>();
             CreateMap<Member, Note>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
                 .ForMember(dest => dest.Member, opt => opt.MapFrom(src => src))
