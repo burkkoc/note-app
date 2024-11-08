@@ -65,6 +65,8 @@ namespace NoteApp.DataAccessEFCore.Repositories
             T model = await Table.FindAsync(Guid.Parse(id));
             if(model == null)
                 throw new ArgumentNullException(nameof(model));
+            if (model.Status == Core.Enums.Status.Passive)
+                throw new Exception($"Already deleted.");
             
             return SoftRemove(model, username);
 
