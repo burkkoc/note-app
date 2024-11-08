@@ -19,8 +19,4 @@
     <ProjectReference Include="..\NoteApp.Interfaces\NoteApp.Interfaces.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Notes\Queries\" />
-  </ItemGroup>
-
 </Project>

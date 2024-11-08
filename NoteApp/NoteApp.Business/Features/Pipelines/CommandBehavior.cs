@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using NoteApp.Business.Features.Login;
 using NoteApp.Business.Features.Members.Commands.DeleteMember;
 using NoteApp.Business.Features.Members.Commands.EditMember;
+using NoteApp.Business.Features.Notes.Commands.CreateNote;
 using NoteApp.Business.Features.Users.Commands;
 using NoteApp.Core.Auth;
 using NoteApp.Core.Enums;
@@ -28,6 +29,10 @@ namespace NoteApp.Business.Features.Members.Pipelines
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
             var user = _httpContextAccessor.HttpContext.User;
+            if(user.Identity == null)
+            {
+                throw new Exception("User not found.");
+            }
 
             if (request is not LoginCommand && !user.Identity.IsAuthenticated)
             {
@@ -36,17 +41,22 @@ namespace NoteApp.Business.Features.Members.Pipelines
 
             if (request is DeleteMemberCommand && !user.HasClaim(c => c.Type == CustomClaims.CanDeleteMember && c.Value == ClaimStates.Yes.ToString()))
             {
-                throw new UnauthorizedAccessException("You do NOT have claims for deleting.");
+                throw new UnauthorizedAccessException("You do NOT have permission to delete members.");
             }
 
             if (request is UpdateMemberCommand && !user.HasClaim(c => c.Type == CustomClaims.CanEditMember && c.Value == ClaimStates.Yes.ToString()))
             {
-                throw new UnauthorizedAccessException("You do NOT have claims for editing.");
+                throw new UnauthorizedAccessException("You do NOT have permission to edit members.");
             }
 
             if (request is CreateMemberCommand && !user.HasClaim(c => c.Type == CustomClaims.CanCreateMember && c.Value == ClaimStates.Yes.ToString()))
             {
-                throw new UnauthorizedAccessException("You do NOT have claims for creating.");
+                throw new UnauthorizedAccessException("You do NOT have permission to create members.");
+            }
+
+            if (request is CreateNoteCommand && !user.HasClaim(c => c.Type == CustomClaims.CanCreateOwnNote && c.Value == ClaimStates.Yes.ToString()))
+            {
+                throw new UnauthorizedAccessException("You do NOT have permission to create notes.");
             }
 
             return await next();

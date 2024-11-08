@@ -3,6 +3,8 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using NoteApp.Business.Services;
+using NoteApp.Core.Auth;
+using NoteApp.Core.Enums;
 using NoteApp.DataAccessEFCore.Repositories;
 using NoteApp.DataAccessEFCore.Repositories.UserRepositories;
 using NoteApp.Entities.DbSets;
@@ -32,14 +34,24 @@ namespace NoteApp.Business.Features.Users.Commands
         }
         public async Task<bool> Handle(CreateMemberCommand request, CancellationToken cancellationToken)
         {
-            
+
             var identityUser = _mapper.Map<IdentityUser>(request);
             var member = _mapper.Map<Member>(request);
 
             member.IdentityUserId = identityUser.Id;
             member.CreatedBy = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? throw new ArgumentNullException();
 
-            string pass = PasswordService.GenerateRandomPassword();
+            string pass = /*PasswordService.GenerateRandomPassword();*/"Asd123$.";
+
+            var claims = new List<Claim>
+            {
+                new Claim(CustomClaims.CanDeleteOwnNote, ClaimStates.Yes.ToString()),
+                new Claim(CustomClaims.CanEditOwnNote, ClaimStates.Yes.ToString()),
+                new Claim(CustomClaims.CanCreateOwnNote, ClaimStates.Yes.ToString())
+            };
+
+
+
             var identityResult = await _userManager.CreateAsync(identityUser, pass);
             bool memberResult = await _writeRepository.AddAsync(member);
             if (!memberResult)
@@ -48,12 +60,13 @@ namespace NoteApp.Business.Features.Users.Commands
             if (!identityResult.Succeeded)
                 throw new Exception("Member creation failed: " + string.Join(", ", identityResult.Errors.Select(e => e.Description)));
 
-           
 
+
+            await _userManager.AddClaimsAsync(identityUser, claims);
             await _writeRepository.SaveAsync();
 
             return true;
-                
+
         }
     }
 }

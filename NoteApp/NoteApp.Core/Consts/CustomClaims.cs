@@ -16,7 +16,6 @@ namespace NoteApp.Core.Auth
         public const string CanReadAnyNote = "CanReadAnyNote";
         public const string CanDeleteAnyNote = "CanEditAnyNote";
 
-        public const string CanReadOwnNote = "CanReadNote";
         public const string CanCreateOwnNote = "CanCreateOwnNote";
         public const string CanDeleteOwnNote = "CanDeleteOwnNote";
         public const string CanEditOwnNote = "CanEditOwnNote";
