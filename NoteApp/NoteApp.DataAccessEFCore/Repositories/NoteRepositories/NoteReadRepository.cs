@@ -1,4 +1,5 @@
-﻿using NoteApp.DataAccess.Contexts;
+﻿using NoteApp.Core.Repositories.Abstracts;
+using NoteApp.DataAccess.Contexts;
 using NoteApp.Entities.DbSets;
 using NoteApp.Interfaces.Repositories;
 using System;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace NoteApp.DataAccessEFCore.Repositories
 {
-    public class NoteReadRepository : ReadRepository<Member>
+    public class NoteReadRepository : ReadRepository<Note>, INoteReadRepository
     {
         public NoteReadRepository(NoteAppDbContext context) : base(context)
         {
@@ -17,3 +18,4 @@ namespace NoteApp.DataAccessEFCore.Repositories
         }
     }
 }
+ 

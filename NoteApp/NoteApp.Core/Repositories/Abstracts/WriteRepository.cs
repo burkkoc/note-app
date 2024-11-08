@@ -1,23 +1,27 @@
 ﻿using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore;
 using NoteApp.Core.Entities.Base;
-using NoteApp.Interfaces.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NoteApp.DataAccess.Contexts;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using NoteApp.Core.Entities.Interfaces;
+using NoteApp.Core.Repositories.Interfaces;
 
-namespace NoteApp.DataAccessEFCore.Repositories
+namespace NoteApp.Core.Repositories.Abstracts
 {
-    public class WriteRepository<T> : IWriteRepository<T> where T : BaseEntity
+    public abstract class WriteRepository<T> : IWriteRepositorys<T> where T : BaseEntity
     {
-        readonly private NoteAppDbContext _context;
+        protected readonly IdentityDbContext<IdentityUser, IdentityRole, string> _context;
+        protected readonly DbSet<T> _table;
 
-        public WriteRepository(NoteAppDbContext context)
+        protected WriteRepository(IdentityDbContext<IdentityUser, IdentityRole, string> context)
         {
             _context = context;
+            _table = _context.Set<T>();
         }
 
         public DbSet<T> Table => _context.Set<T>();
@@ -25,7 +29,7 @@ namespace NoteApp.DataAccessEFCore.Repositories
         public async Task<bool> AddAsync(T model)
         {
             model.CreatedDate = DateTime.Now;
-            model.Status = Core.Enums.Status.Added;
+            model.Status = Enums.Status.Added;
             EntityEntry<T> entityEntry = await Table.AddAsync(model);
             return entityEntry.State == EntityState.Added;
         }
@@ -53,7 +57,7 @@ namespace NoteApp.DataAccessEFCore.Repositories
 
         public bool SoftRemove(T model, string username)
         {
-            model.Status = Core.Enums.Status.Passive;
+            model.Status = Enums.Status.Passive;
             model.DeletedDate = DateTime.Now;
             model.DeletedBy = username;
             EntityEntry<T> entityEntry = Table.Update(model);
@@ -63,11 +67,11 @@ namespace NoteApp.DataAccessEFCore.Repositories
         public async Task<bool> SoftRemoveAsync(string id, string username)
         {
             T model = await Table.FindAsync(Guid.Parse(id));
-            if(model == null)
+            if (model == null)
                 throw new ArgumentNullException(nameof(model));
-            if (model.Status == Core.Enums.Status.Passive)
+            if (model.Status == Enums.Status.Passive)
                 throw new Exception($"Already deleted.");
-            
+
             return SoftRemove(model, username);
 
         }
@@ -85,7 +89,7 @@ namespace NoteApp.DataAccessEFCore.Repositories
         {
             model.ModifiedDate = DateTime.Now;
             model.ModifiedBy = username;
-            model.Status = Core.Enums.Status.Modified;
+            model.Status = Enums.Status.Modified;
             EntityEntry<T> entityEntry = Table.Update(model);
             return entityEntry.State == EntityState.Modified;
         }

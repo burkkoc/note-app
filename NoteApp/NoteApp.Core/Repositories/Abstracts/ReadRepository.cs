@@ -1,23 +1,28 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using NoteApp.Core.Entities.Base;
-using NoteApp.DataAccess.Contexts;
-using NoteApp.Interfaces.Repositories;
+using NoteApp.Core.Entities.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using NoteApp.Core.Repositories.Interfaces;
 
-namespace NoteApp.DataAccessEFCore.Repositories
+namespace NoteApp.Core.Repositories.Abstracts
 {
     public class ReadRepository<T> : IReadRepository<T> where T : BaseEntity
     {
-        private readonly NoteAppDbContext _context;
+        protected readonly IdentityDbContext<IdentityUser, IdentityRole, string> _context;
+        protected readonly DbSet<T> _table;
+        
 
-        public ReadRepository(NoteAppDbContext context)
+        public ReadRepository(IdentityDbContext<IdentityUser, IdentityRole, string> context)
         {
             _context = context;
+            _table = _context.Set<T>();
         }
 
         public DbSet<T> Table => _context.Set<T>();
