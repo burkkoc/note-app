@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using NoteApp.Business.Features.Login;
+using NoteApp.Business.Features.Members.Commands.EditMember;
 using NoteApp.Business.Features.Users.Commands;
 using NoteApp.Business.Features.Users.Queries;
+using NoteApp.DTOs.Authentication;
 using NoteApp.DTOs.User;
 using NoteApp.Entities.DbSets;
 using System;
@@ -19,10 +22,22 @@ namespace NoteApp.Business.Extensions.Mapper
         public MappingProfile()
         {
             CreateMap<Member, MemberDTO>();
-
             CreateMap<GetMemberByIdQuery, MemberDTO>();
-
             CreateMap<MemberCreateDTO, CreateMemberCommand>();
+            CreateMap<MemberUpdateDTO, UpdateMemberCommand>();
+
+            CreateMap<UpdateMemberCommand, Member>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
+
+            CreateMap<UpdateMemberCommand, IdentityUser>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
+
+
+            CreateMap<MemberUpdateDTO, IdentityUser>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
+
+            CreateMap<LoginDTO, LoginCommand>();
+
 
             CreateMap<CreateMemberCommand, IdentityUser>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore())
@@ -31,8 +46,6 @@ namespace NoteApp.Business.Extensions.Mapper
                 .ForMember(dest => dest.NormalizedEmail, opt => opt.MapFrom(src => src.Email.ToUpper()))
                 .ForMember(dest => dest.NormalizedUserName, opt => opt.MapFrom(src => src.Email.ToUpper()))
                 .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber));
-
-
             CreateMap<CreateMemberCommand, Member>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore());
         }
