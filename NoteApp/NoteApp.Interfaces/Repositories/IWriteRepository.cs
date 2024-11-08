@@ -15,7 +15,7 @@ namespace NoteApp.Interfaces.Repositories
         Task<bool> RemoveAsync(string id);
 
         bool RemoveRange(List<T> models);
-        bool Update(T model);
+        bool Update(T model, string username);
 
         Task<int> SaveAsync();
     }

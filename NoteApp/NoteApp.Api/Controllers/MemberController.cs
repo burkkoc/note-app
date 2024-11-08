@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NoteApp.Business.Features.Members.Commands.DeleteMember;
+using NoteApp.Business.Features.Members.Commands.EditMember;
 using NoteApp.Business.Features.Users.Commands;
 using NoteApp.Business.Features.Users.Queries;
 using NoteApp.DTOs.User;
@@ -44,7 +46,7 @@ namespace NoteApp.Api.Controllers
             try
             {
                 var result = await _mediator.Send(_mapper.Map<CreateMemberCommand>(createDTO));
-                return Ok("Success.");
+                return Ok("User created.");
             }
             catch (Exception ex)
             {
@@ -58,11 +60,25 @@ namespace NoteApp.Api.Controllers
             try
             {
                 var result = await _mediator.Send(new DeleteMemberCommand { MemberId = Id});
-                return Ok("Success.");
+                return Ok("User deleted.");
             }
             catch (Exception ex)
             {
                 return BadRequest(new { message = "Failed to delete user: ", error = ex.Message });
+            }
+        }
+
+        [HttpPatch("Update")]
+        public async Task<IActionResult> Update([FromForm] MemberUpdateDTO updateDTO)
+        {
+            try
+            {
+                var result = await _mediator.Send(_mapper.Map<UpdateMemberCommand>(updateDTO));
+                return Ok("User updated.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Failed to update user: ", error = ex.Message });
             }
         }
 

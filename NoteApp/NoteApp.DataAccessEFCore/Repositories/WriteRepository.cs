@@ -79,11 +79,21 @@ namespace NoteApp.DataAccessEFCore.Repositories
         public async Task<int> SaveAsync() => await _context.SaveChangesAsync();
 
 
-        public bool Update(T model)
+        public bool Update(T model, string username)
         {
             model.ModifiedDate = DateTime.Now;
-            EntityEntry entityEntry = Table.Update(model);
+            model.ModifiedBy = username;
+            model.Status = Core.Enums.Status.Modified;
+            EntityEntry<T> entityEntry = Table.Update(model);
             return entityEntry.State == EntityState.Modified;
+        }
+
+        public async Task<bool> UpdateAsync(T model, string username)
+        {
+            EntityEntry<T> entityEntry = await Task.FromResult(_context.Update(model));
+            if (entityEntry == null)
+                throw new ArgumentNullException(nameof(model));
+            return Update(model, username);
         }
 
     }

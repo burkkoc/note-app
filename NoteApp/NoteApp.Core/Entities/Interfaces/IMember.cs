@@ -8,7 +8,7 @@ namespace NoteApp.Core.Entities.Interfaces
 {
     public interface IMember
     {
-        string? IdentityId { get; set; }
+        string? IdentityUserId { get; set; }
         string FirstName { get; set; }
         string LastName { get; set; }
         string Email { get; set; }
