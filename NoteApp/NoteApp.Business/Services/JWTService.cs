@@ -33,7 +33,7 @@ namespace NoteApp.Business.Services
             _userManager = userManager;
         }
 
-        public async Task<string> GenerateToken(IdentityUser user)
+        public async Task<string> GenerateTokenAsync(IdentityUser user)
         {
 
             var securityKey = Encoding.UTF8.GetBytes(_options.Key);
