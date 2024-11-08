@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using NoteApp.Business.Features.Members.Commands.DeleteMember;
 using NoteApp.Business.Features.Members.Commands.EditMember;
@@ -26,22 +25,21 @@ namespace NoteApp.Api.Controllers
         }
 
         [HttpGet("GetById")]
-        public async Task<IActionResult> GetById(string Id)
+        public async Task<IActionResult> GetById(Guid Id)
         {
             try
             {
-                var query = new GetMemberByIdQuery(Id);
-                var user = await _mediator.Send(query);
+                var user = await _mediator.Send(new GetMemberByIdQuery(Id));
                 return Ok(user);
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Failed to retrieve user: ", error = ex.Message });
+                return BadRequest(new { message = "Failed to retrieve user", errors = ex.InnerException?.Message ?? ex.Message });
             }
         }
 
         [HttpPost("Create")]
-        public async Task<IActionResult> Create([FromForm] MemberCreateDTO createDTO)
+        public async Task<IActionResult> Create([FromBody] MemberCreateDTO createDTO)
         {
             try
             {
@@ -50,7 +48,7 @@ namespace NoteApp.Api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Failed to create user: ", error = ex.Message });
+                return BadRequest(new { message = "Failed to create user", errors = ex.InnerException?.Message ?? ex.Message });
             }
         }
 
@@ -59,17 +57,17 @@ namespace NoteApp.Api.Controllers
         {
             try
             {
-                var result = await _mediator.Send(new DeleteMemberCommand { MemberId = Id});
+                var result = await _mediator.Send(new DeleteMemberCommand(Id));
                 return Ok("User deleted.");
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Failed to delete user: ", error = ex.Message });
+                return BadRequest(new { message = "Failed to delete user", errors = ex.InnerException?.Message ?? ex.Message });
             }
         }
 
         [HttpPatch("Update")]
-        public async Task<IActionResult> Update([FromForm] MemberUpdateDTO updateDTO)
+        public async Task<IActionResult> Update([FromBody] MemberUpdateDTO updateDTO)
         {
             try
             {
@@ -78,7 +76,7 @@ namespace NoteApp.Api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Failed to update user: ", error = ex.Message });
+                return BadRequest(new { message = "Failed to update user", errors = ex.InnerException?.Message ?? ex.Message });
             }
         }
 

@@ -11,9 +11,9 @@ builder.Services.AddDataAccessServices(builder.Configuration)
     .AddBusinessServices()
     .AddIdentityConfiguration(builder.Configuration)
     .AddSwaggerConfiguration();
-    
 
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
