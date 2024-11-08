@@ -48,18 +48,12 @@ namespace NoteApp.DataAccessEFCore.Seeds
                 EmailConfirmed = true
             };
 
-            //adminUser.PasswordHash = new PasswordHasher<IdentityUser>().HashPassword(adminUser, AdminPassword);
             var result = await userManager.CreateAsync(adminUser, AdminPassword);
             if (result.Succeeded)
             {
                 await userManager.AddToRoleAsync(adminUser, Enum.GetName(typeof(Roles), 1) ?? throw new NullReferenceException());
                 await AddClaims(userManager, adminUser);
             }
-            //var adminRoleId = context.Roles.FirstOrDefault(role => role.Name == Roles.Admin.ToString())!.Id;
-
-            //await context.Member.AddAsync(member);
-
-            //await context.SaveChangesAsync();
         }
 
         private static async Task AddRoles(RoleManager<IdentityRole> roleManager)
@@ -85,9 +79,10 @@ namespace NoteApp.DataAccessEFCore.Seeds
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Role, Roles.Admin.ToString()),
-                new Claim(CustomClaims.CanCreate, "true"),
-                new Claim(CustomClaims.CanEdit, "true"),
-                new Claim(CustomClaims.CanDelete, "true"),
+                new Claim(CustomClaims.CanCreateMember, ClaimStates.Yes.ToString()),
+                new Claim(CustomClaims.CanEditMember, ClaimStates.Yes.ToString()),
+                new Claim(CustomClaims.CanDeleteMember, ClaimStates.Yes.ToString()),
+                new Claim(CustomClaims.CanReadNote, ClaimStates.Yes.ToString()),
             };
 
             foreach (var claim in claims)

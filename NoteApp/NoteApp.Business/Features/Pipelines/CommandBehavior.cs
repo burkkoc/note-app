@@ -34,17 +34,17 @@ namespace NoteApp.Business.Features.Members.Pipelines
                 throw new UnauthorizedAccessException("You have to log in first.");
             }
 
-            if (request is DeleteMemberCommand && !user.HasClaim(c => c.Type == CustomClaims.CanDelete && c.Value == ClaimStates.Yes.ToString()))
+            if (request is DeleteMemberCommand && !user.HasClaim(c => c.Type == CustomClaims.CanDeleteMember && c.Value == ClaimStates.Yes.ToString()))
             {
                 throw new UnauthorizedAccessException("You do NOT have claims for deleting.");
             }
 
-            if (request is UpdateMemberCommand && !user.HasClaim(c => c.Type == CustomClaims.CanEdit && c.Value == ClaimStates.Yes.ToString()))
+            if (request is UpdateMemberCommand && !user.HasClaim(c => c.Type == CustomClaims.CanEditMember && c.Value == ClaimStates.Yes.ToString()))
             {
                 throw new UnauthorizedAccessException("You do NOT have claims for editing.");
             }
 
-            if (request is CreateMemberCommand && !user.HasClaim(c => c.Type == CustomClaims.CanCreate && c.Value == ClaimStates.Yes.ToString()))
+            if (request is CreateMemberCommand && !user.HasClaim(c => c.Type == CustomClaims.CanCreateMember && c.Value == ClaimStates.Yes.ToString()))
             {
                 throw new UnauthorizedAccessException("You do NOT have claims for creating.");
             }
