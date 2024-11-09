@@ -16,8 +16,19 @@ builder.Services.AddDataAccessServices(builder.Configuration)
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigin",
+        builder =>
+        {
+            builder.AllowAnyOrigin()
+                   .AllowAnyMethod()
+                   .AllowAnyHeader();
+        });
+});
 
 var app = builder.Build();
+app.UseCors("AllowAllOrigin");
 
 await NoteApp.DataAccessEFCore.Extensions.DependencyInjection.Seed(app);
 if (app.Environment.IsDevelopment())
