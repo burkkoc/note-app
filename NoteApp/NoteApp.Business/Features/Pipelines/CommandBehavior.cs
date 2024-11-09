@@ -1,6 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
-using NoteApp.Business.Features.Login;
+using NoteApp.Business.Features.Auth.Claims.AssignClaim;
+using NoteApp.Business.Features.Auth.Claims.UnassignClaim;
+using NoteApp.Business.Features.Auth.Login;
 using NoteApp.Business.Features.Members.Commands.DeleteMember;
 using NoteApp.Business.Features.Members.Commands.EditMember;
 using NoteApp.Business.Features.Notes.Commands.CreateNote;
@@ -57,6 +59,16 @@ namespace NoteApp.Business.Features.Members.Pipelines
             if (request is CreateNoteCommand && !user.HasClaim(c => c.Type == CustomClaims.CanCreateOwnNote && c.Value == ClaimStates.Yes.ToString()))
             {
                 throw new UnauthorizedAccessException("You do NOT have permission to create notes.");
+            }
+
+            if (request is AssignClaimCommand && !user.HasClaim(c => c.Type == CustomClaims.CanGivePermission && c.Value == ClaimStates.Yes.ToString()))
+            {
+                throw new UnauthorizedAccessException("You do NOT have permission to assign members.");
+            }
+
+            if (request is UnassignClaimCommand && !user.HasClaim(c => c.Type == CustomClaims.CanRemovePermission && c.Value == ClaimStates.Yes.ToString()))
+            {
+                throw new UnauthorizedAccessException("You do NOT have permission to unassign members.");
             }
 
             return await next();

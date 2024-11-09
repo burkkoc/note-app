@@ -10,7 +10,6 @@ namespace NoteApp.Core.Enums
     {
         Admin = 1,
         Moderator,
-        Member,
-        Visitor
+        Member
     }
 }

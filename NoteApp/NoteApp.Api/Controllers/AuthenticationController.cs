@@ -4,10 +4,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using NoteApp.Business.Features.Login;
+using NoteApp.Business.Features.Auth.Claims.AssignClaim;
+using NoteApp.Business.Features.Auth.Claims.UnassignClaim;
+using NoteApp.Business.Features.Auth.Login;
 using NoteApp.Business.Features.Users.Commands;
 using NoteApp.Business.Services;
+using NoteApp.Core.Auth;
 using NoteApp.DTOs.Authentication;
+using System.Security.Claims;
 
 namespace NoteApp.Api.Controllers
 {
@@ -35,7 +39,39 @@ namespace NoteApp.Api.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(new { message = "Log in failed: ", error = ex.Message });
+                return BadRequest(new { message = "Log in failed.", error = ex.Message });
+            }
+        }
+
+        [HttpPost("AssignMember")]
+        public async Task<IActionResult> AssignMember(string id/*, List<string> claims*/) //front
+        {
+            try
+            {
+                List<string> claims = new(); //silinecek
+                claims.Add(CustomClaims.CanCreateMember);
+                var result = await _mediator.Send(new AssignClaimCommand(id, claims));
+                return Ok("Assign operation is success.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Assign failed.", error = ex.Message });
+            }
+        }
+
+        [HttpPost("UnassignMember")]
+        public async Task<IActionResult> UnassignMember(string id/*, List<string> claims*/) //front
+        {
+            try
+            {
+                List<string> claims = new(); //silinecek
+                claims.Add(CustomClaims.CanCreateMember);
+                var result = await _mediator.Send(new UnassignClaimCommand(id, claims));
+                return Ok("Unassign operation is success.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Unassign failed.", error = ex.Message });
             }
         }
     }

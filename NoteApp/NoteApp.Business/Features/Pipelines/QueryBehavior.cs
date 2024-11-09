@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
-using NoteApp.Business.Features.Login;
+using NoteApp.Business.Features.Auth.Login;
 using NoteApp.Business.Features.Members.Commands.DeleteMember;
 using NoteApp.Business.Features.Members.Commands.EditMember;
 using NoteApp.Business.Features.Members.Queries.GetAllMembers;

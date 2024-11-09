@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using NoteApp.Business.Features.Login;
+using NoteApp.Business.Features.Auth.Login;
 using NoteApp.Business.Features.Members.Commands.EditMember;
 using NoteApp.Business.Features.Notes.Commands.CreateNote;
 using NoteApp.Business.Features.Users.Commands;

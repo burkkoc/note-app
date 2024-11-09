@@ -12,8 +12,8 @@ using NoteApp.DataAccess.Contexts;
 namespace NoteApp.DataAccess.Migrations
 {
     [DbContext(typeof(NoteAppDbContext))]
-    [Migration("20241108191513_mig1")]
-    partial class mig1
+    [Migration("20241109004438_mig")]
+    partial class mig
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

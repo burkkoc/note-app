@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
-using NoteApp.Business.Services;
+using NoteApp.Business.Features.Auth.Login;
 using NoteApp.Interfaces.BusinessServices;
 using System;
 using System.Collections.Generic;

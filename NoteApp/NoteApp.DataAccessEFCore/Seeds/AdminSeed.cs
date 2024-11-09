@@ -100,21 +100,9 @@ namespace NoteApp.DataAccessEFCore.Seeds
 
         private static async Task AddClaims(UserManager<IdentityUser> userManager, IdentityUser adminUser)
         {
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimTypes.Role, Roles.Admin.ToString()),
-                new Claim(CustomClaims.CanCreateMember, ClaimStates.Yes.ToString()),
-                new Claim(CustomClaims.CanEditMember, ClaimStates.Yes.ToString()),
-                new Claim(CustomClaims.CanDeleteMember, ClaimStates.Yes.ToString()),
-                new Claim(CustomClaims.CanReadAnyMember, ClaimStates.Yes.ToString()),
-                new Claim(CustomClaims.CanDeleteOwnNote, ClaimStates.Yes.ToString()),
-                new Claim(CustomClaims.CanEditOwnNote, ClaimStates.Yes.ToString()),
-                new Claim(CustomClaims.CanCreateOwnNote, ClaimStates.Yes.ToString()),
-                new Claim(CustomClaims.CanReadAnyNote, ClaimStates.Yes.ToString()),
-                new Claim(CustomClaims.CanGivePermission, ClaimStates.Yes.ToString()),
-            };
-
-            foreach (var claim in claims)
+            await userManager.AddClaimAsync(adminUser, new Claim(ClaimTypes.Role, Roles.Admin.ToString()));
+           
+            foreach (var claim in CustomClaims.CustomClaimList)
             {
                 var existingClaim = await userManager.GetClaimsAsync(adminUser);
                 if (!existingClaim.Any(c => c.Type == claim.Type && c.Value == claim.Value))
