@@ -11,12 +11,12 @@ const Login = () => {
   const { loading, error } = useSelector((state) => state.auth);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errors, setErrors] = useState({
-    email: '',
-    password: '',
-    credentials: '',
-    hasErrors: false
-  });
+  // const [errors, setErrors] = useState({
+  //   email: '',
+  //   password: '',
+  //   credentials: '',
+  //   hasErrors: false
+  // });
 
 
   const handleSubmit = (e) => {
@@ -25,45 +25,44 @@ const Login = () => {
     setPassword(e.target[1].value);
 
 
-    validationControl(email, password);
+    // validationControl(email, password);
     
-    if (errors.hasErrors) {
-      console.log(errors);
-      return;
-    }
-    console.log(email,password);
+    // if (errors.hasErrors) {
+    //   console.log(errors);
+    //   return;
+    // }
+    // console.log(email,password);
   
     dispatch(loginUser({ email, password }));
   };
-  const validationControl = (email, password) => {
-    const newErrors = {
-      email: '',
-      password: '',
-      credentials: '',
-      hasErrors:false
-    };
+  // const validationControl = (email, password) => {
+  //   const newErrors = {
+  //     email: '',
+  //     password: '',
+  //     credentials: '',
+  //     hasErrors:false
+  //   };
 
-    if (!email) {
-         newErrors.email ="Email cannot be empty.";
-         newErrors.hasErrors=true;
-     }
-    if (!password) {
-     newErrors.password =  "Password cannot be empty.";
-     newErrors.hasErrors=true;
-    }
+  //   if (!email) {
+  //        newErrors.email ="Email cannot be empty.";
+  //        newErrors.hasErrors=true;
+  //    }
+  //   if (!password) {
+  //    newErrors.password =  "Password cannot be empty.";
+  //    newErrors.hasErrors=true;
+  //   }
 
-    if (newErrors.hasErrors) {
-      setErrors(newErrors);
-    } else {
-      setErrors({
-        email: '',
-        password: '',
-        credentials: '',
-        hasErrors:false
-      });
-    }
+  //   if (newErrors.hasErrors) {
+  //     setErrors(newErrors);
+  //   } else {
+  //     setErrors({
+  //       email: '',
+  //       password: '',
+  //       credentials: '',
+  //       hasErrors:false
+  //     });
+  //   }
    
-};
 
 
   return (
@@ -82,24 +81,24 @@ const Login = () => {
                     className="login__input name"
                     name="email"
                     placeholder="Email"
+                    required
                   />
                 </div>
-                {errors.email != ''&& <p className="error-message">{errors.email}</p>}
+                {/* {errors.email != ''&& <p className="error-message">{errors.email}</p>} */}
 
                 <div className="login__row">
                   <FontAwesomeIcon icon={faLock} className="login__icon" />
-                  <div className="input-password">
                     <input
                       type="password"
                       className="login__input pass"
                       name="password"
                       placeholder="Password"
+                      required
                     />
-                  </div>
                 </div>
 
 
-                 {errors.password != '' && <p className="error-message">{errors.password}</p>}
+                 {/* {errors.password != '' && <p className="error-message">{errors.password}</p>} */}
                  {/* {(!errors.password === '' && !errors.email === '') && errors.credentials && (<p className="error-message">{errors.credentials}</p>)} */}
                 <button
                   type="submit"

@@ -18,6 +18,7 @@ body {
   background-size: cover;
   background-position: center;
   background: linear-gradient(145deg, #4a6086, #465267);
+  color:#495D7F;
 
 }
 
@@ -69,6 +70,7 @@ body {
   .form-login {
     display: flex;
     flex-direction: column;
+        border-radius:5px;
 
     .login__row {
       display: flex;
@@ -78,10 +80,12 @@ body {
       border-radius: 0.5rem;
       background: linear-gradient(145deg, #4a6086, #465267);
       position: relative;
+        border-radius:5px;
       
       .login__icon {
         margin-right: 1.5rem; // Sağdan boşluk artırıldı
-        margin-left: 0.5rem;  // Soldan boşluk eklendi
+         margin-left: 1.5rem;  // Soldan boşluk eklendi
+        justify-content: center;
         width: 2rem;
         height: 2rem;
         color: #fff;
@@ -95,22 +99,12 @@ body {
         flex: 1; 
         padding: 1rem;
         font-size: 1.05rem;
-        color: #fdfcfd;
-        background: transparent;
+        border-radius: 5px;
         border: none;
         
-        &::placeholder {
-          color: #ddd;
-        }
-        
-        &:focus {
-          outline: none;
-        }
+       
       }
     }
-
-    .input-password {
-      position: relative;
       
 
       .password-icons {
@@ -122,7 +116,6 @@ body {
         color: #e7d2d2;
        
       }
-    }
 
     .login_checkbox {
       display: flex;
@@ -211,7 +204,6 @@ body {
       .login__row {
         flex-direction: column;
         align-items: flex-start;
-
         .login__icon,
         .login__input {
           width: 100%;
