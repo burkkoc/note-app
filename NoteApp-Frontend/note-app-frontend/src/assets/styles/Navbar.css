@@ -1,9 +1,0 @@
-
-.navbar-link::after {
-    content: none !important;  /* Noktayı kaldırır */
-  }
-  
-  .navbar-link {
-    list-style: none !important;  /* Liste stilini kaldırır */
-    padding-left: 0 !important;   /* Padding'i sıfırlar */
-  }

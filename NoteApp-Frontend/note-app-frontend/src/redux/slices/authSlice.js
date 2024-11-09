@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import api from '../Api/api';
+import api from '../../Api/api';
 
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
@@ -11,7 +11,6 @@ export const loginUser = createAsyncThunk(
       }
       return rejectWithValue('Login failed');
     } catch (error) {
-      // Hata mesajını kontrol et ve gerekirse fallback mesajı ekle
       return rejectWithValue(error.response?.data || 'Giriş başarısız oldu.');
     }
   }
@@ -21,7 +20,7 @@ const authSlice = createSlice({
   name: 'auth',
   initialState: {
     user: null,
-    token: localStorage.getItem('token'),  // Sayfa yenilendiğinde token'ı al
+    token: localStorage.getItem('token'), 
     loading: false,
     error: null,
   },
@@ -29,7 +28,7 @@ const authSlice = createSlice({
     logout: (state) => {
       state.user = null;
       state.token = null;
-      localStorage.removeItem('token');  // Çıkış yaparken token'ı temizle
+      localStorage.removeItem('token'); 
     },
   },
   extraReducers: (builder) => {
@@ -42,7 +41,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.user = action.payload.memberDTO;
         state.token = action.payload.token;
-        localStorage.setItem('token', action.payload.token); // Token'ı kaydet
+        localStorage.setItem('token', action.payload.token);
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
