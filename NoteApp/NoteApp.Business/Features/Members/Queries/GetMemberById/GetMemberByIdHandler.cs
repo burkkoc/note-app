@@ -3,7 +3,7 @@ using MediatR;
 using NoteApp.Business.Features.Users.Queries;
 using NoteApp.Core.Repositories.Interfaces;
 using NoteApp.DataAccessEFCore.Repositories.UserRepositories;
-using NoteApp.DTOs.User;
+using NoteApp.DTOs.Member;
 using NoteApp.Entities.DbSets;
 using NoteApp.Interfaces.Repositories;
 using System;

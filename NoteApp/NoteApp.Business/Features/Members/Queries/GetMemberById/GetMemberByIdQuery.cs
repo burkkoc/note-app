@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using NoteApp.DTOs.User;
+using NoteApp.DTOs.Member;
 using System;
 using System.Collections.Generic;
 using System.Linq;

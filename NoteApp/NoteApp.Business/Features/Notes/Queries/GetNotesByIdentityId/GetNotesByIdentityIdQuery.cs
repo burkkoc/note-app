@@ -2,7 +2,6 @@
 using MediatR;
 using NoteApp.Business.Features.Users.Queries;
 using NoteApp.DTOs.Note;
-using NoteApp.DTOs.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;

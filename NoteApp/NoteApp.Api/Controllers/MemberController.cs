@@ -6,7 +6,7 @@ using NoteApp.Business.Features.Members.Commands.EditMember;
 using NoteApp.Business.Features.Members.Queries.GetAllMembers;
 using NoteApp.Business.Features.Users.Commands;
 using NoteApp.Business.Features.Users.Queries;
-using NoteApp.DTOs.User;
+using NoteApp.DTOs.Member;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 

@@ -7,7 +7,7 @@ using NoteApp.Business.Features.Users.Commands;
 using NoteApp.Business.Features.Users.Queries;
 using NoteApp.DTOs.Authentication;
 using NoteApp.DTOs.Note;
-using NoteApp.DTOs.User;
+using NoteApp.DTOs.Member;
 using NoteApp.Entities.DbSets;
 using System;
 using System.Collections.Generic;

@@ -6,7 +6,6 @@ using NoteApp.Business.Services;
 using NoteApp.Core.Auth;
 using NoteApp.Core.Enums;
 using NoteApp.DataAccessEFCore.Repositories.UserRepositories;
-using NoteApp.DTOs.User;
 using NoteApp.Entities.DbSets;
 using NoteApp.Interfaces.Repositories;
 using System;

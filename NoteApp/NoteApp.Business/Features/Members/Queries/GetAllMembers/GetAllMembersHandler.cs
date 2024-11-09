@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using NoteApp.Business.Features.Users.Queries;
-using NoteApp.DTOs.User;
+using NoteApp.DTOs.Member;
 using System;
 using System.Collections.Generic;
 using System.Linq;

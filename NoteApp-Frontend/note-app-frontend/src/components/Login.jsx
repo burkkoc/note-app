@@ -1,69 +1,42 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../store/authSlice';
+import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import "../assets/styles/LoginForm.scss";
-import { faEye, faEyeSlash, faUser, faLock } from "@fortawesome/free-solid-svg-icons";
+import {  faUser, faLock } from "@fortawesome/free-solid-svg-icons";
+
 
 
 const Login = () => {
+  const { loading, error, user} = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // const [errors, setErrors] = useState({
-  //   email: '',
-  //   password: '',
-  //   credentials: '',
-  //   hasErrors: false
-  // });
-
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setEmail(e.target[0].value);
-    setPassword(e.target[1].value);
-
-
-    // validationControl(email, password);
-    
-    // if (errors.hasErrors) {
-    //   console.log(errors);
-    //   return;
-    // }
-    // console.log(email,password);
   
-    dispatch(loginUser({ email, password }));
+
+
+  const handleSubmit = async (e) => {
+    
+    e.preventDefault();
+    const action = await dispatch(loginUser({ email, password }));
+    if (action.type === 'auth/loginUser/fulfilled') {
+      navigate('/home');  
+    } else {
+      console.log('Login failed');
+    }
   };
-  // const validationControl = (email, password) => {
-  //   const newErrors = {
-  //     email: '',
-  //     password: '',
-  //     credentials: '',
-  //     hasErrors:false
-  //   };
 
-  //   if (!email) {
-  //        newErrors.email ="Email cannot be empty.";
-  //        newErrors.hasErrors=true;
-  //    }
-  //   if (!password) {
-  //    newErrors.password =  "Password cannot be empty.";
-  //    newErrors.hasErrors=true;
-  //   }
-
-  //   if (newErrors.hasErrors) {
-  //     setErrors(newErrors);
-  //   } else {
-  //     setErrors({
-  //       email: '',
-  //       password: '',
-  //       credentials: '',
-  //       hasErrors:false
-  //     });
-  //   }
+  const handleLogout = () => {
+    dispatch(logout());
+  };
    
-
+  useEffect(() => {
+    if (user) {
+      navigate('/home');
+    }
+  }, [user, navigate]);
 
   return (
 
@@ -81,6 +54,7 @@ const Login = () => {
                     className="login__input name"
                     name="email"
                     placeholder="Email"
+                    onChange={(e) => setEmail(e.target.value)}
                     required
                   />
                 </div>
@@ -93,6 +67,7 @@ const Login = () => {
                       className="login__input pass"
                       name="password"
                       placeholder="Password"
+                      onChange={(e) => setPassword(e.target.value)}
                       required
                     />
                 </div>
@@ -102,14 +77,22 @@ const Login = () => {
                  {/* {(!errors.password === '' && !errors.email === '') && errors.credentials && (<p className="error-message">{errors.credentials}</p>)} */}
                 <button
                   type="submit"
+                  disabled={loading}
                   className="login__submit"
                   >
-                    Login
+                    {loading ? 'Logging..' : 'Login'}
                 </button>
                 <p className="login__resendpassword">
                   &nbsp;<a href="#">Forgot Password? Re-send.</a>
                 </p>
+                
               </form>
+              {user && (
+        <div>
+          <p>Welcome, {user.email}</p>
+          <button onClick={handleLogout}>Logout</button>
+        </div>
+      )}
             </div>
           </div>
         </div>
