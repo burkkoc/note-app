@@ -57,5 +57,6 @@ namespace NoteApp.Business.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
     }
 }

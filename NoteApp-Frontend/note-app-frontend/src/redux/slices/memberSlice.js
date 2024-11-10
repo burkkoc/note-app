@@ -6,13 +6,8 @@ export const fetchMembers = createAsyncThunk(
     'members/fetchMembers',  // Thunk işlemi için isim
     async (_, { rejectWithValue }) => {
       try {
-        const token = localStorage.getItem('token');
-        const response = await api.get('/Member/GetAll', {
-            headers: {
-              Authorization: `${token}`  // Token'ı ekliyoruz
-            }
-            
-        });
+        // const token = localStorage.getItem('token');
+        const response = await api.get('/Member/GetAll');
         console.log(response);
         return response.data; 
     } catch (error) {

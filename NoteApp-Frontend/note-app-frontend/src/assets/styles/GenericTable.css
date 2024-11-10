@@ -1,0 +1,44 @@
+/* MemberTable.css */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 1rem;
+  text-align: left;
+}
+
+thead {
+  background-color: #2d3748; /* Koyu gri */
+}
+
+tbody tr:nth-child(even) {
+  background-color: #2a3b47; /* Daha koyu gri */
+}
+
+tbody tr:hover {
+  background-color: #374151; /* Hover için arka plan */
+}
+
+th {
+  font-size: 0.875rem;
+  color: #e2e8f0; /* Açık gri başlık yazısı */
+}
+
+td {
+  color: #edf2f7; /* Açık gri metin */
+}
+
+caption {
+  color: #e2e8f0;
+  background-color: #4a5568; /* Başlık arka planı */
+}
+
+a {
+  color: #38bdf8; /* Cyan renk */
+}
+
+a:hover {
+  text-decoration: underline;
+}

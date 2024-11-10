@@ -1,7 +1,7 @@
 import React from 'react';
 import "../assets/styles/Navbar.css";
 import { useDispatch } from 'react-redux';
-import { fetchMembers } from '../redux/slices/memberSlice';
+import { logout } from '../redux/slices/authSlice';
 import { useNavigate } from 'react-router-dom'; // React Router yönlendirme için
 
 const NavbarComp = () => {
@@ -9,12 +9,18 @@ const NavbarComp = () => {
   const navigate = useNavigate();
 
   const handleMembersClick = () => {
-    dispatch(fetchMembers()); // API isteği gönder
-    navigate('/members'); // Members sayfasına yönlendir
+    // dispatch(fetchMembers()); // API isteği gönder
+    navigate('/member'); // Members sayfasına yönlendir
+  };
+
+  const handleNotesClick = () => {
+    // dispatch(fetchMembers()); // API isteği gönder
+    navigate('/notes'); // Members sayfasına yönlendir
   };
 
   const handleLogout = () => {
-    // Çıkış işlemi burada yapılır
+    dispatch(logout());
+    navigate('/login');
   };
 
   return (
@@ -29,12 +35,12 @@ const NavbarComp = () => {
           <a onClick={handleMembersClick} className="text-white hover:text-gray-300 focus:outline-none focus:ring-0 cursor-pointer">
             Members
           </a>
-          <a href="/notes" className="text-white hover:text-gray-300 focus:outline-none focus:ring-0">
+          <a onClick={handleNotesClick} className="text-white hover:text-gray-300 focus:outline-none focus:ring-0 cursor-pointer">
             Notes
           </a>
-          <a href="/login" onClick={handleLogout} className="text-white hover:text-gray-300 focus:outline-none focus:ring-0">
+          <button onClick={handleLogout} className="text-white hover:text-gray-300 focus:outline-none focus:ring-0">
             Logout
-          </a>
+          </button>
         </div>
         <div className="md:hidden">
           <button className="text-white focus:outline-none">

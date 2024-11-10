@@ -30,6 +30,8 @@ namespace NoteApp.Business.Features.Members.Pipelines
 
         public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
         {
+            var authorizationHeader = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString();
+            var s = _httpContextAccessor.HttpContext?.Request;
             var user = _httpContextAccessor.HttpContext.User;
             if(user.Identity == null)
             {

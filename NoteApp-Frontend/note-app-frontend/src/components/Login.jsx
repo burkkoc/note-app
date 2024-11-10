@@ -20,7 +20,7 @@ const Login = () => {
   const handleSubmit = async (e) => {
     
     e.preventDefault();
-    const action = await dispatch(loginUser({ email, password }));
+    const action =await dispatch(loginUser({ email, password }));
     if (action.type === 'auth/loginUser/fulfilled') {
       navigate('/home');  
     } else {
