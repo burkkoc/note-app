@@ -2,20 +2,18 @@ import React from 'react';
 import "../assets/styles/Navbar.css";
 import { useDispatch } from 'react-redux';
 import { logout } from '../redux/slices/authSlice';
-import { useNavigate } from 'react-router-dom'; // React Router yönlendirme için
+import { useNavigate } from 'react-router-dom'; 
 
 const NavbarComp = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleMembersClick = () => {
-    // dispatch(fetchMembers()); // API isteği gönder
-    navigate('/member'); // Members sayfasına yönlendir
+    navigate('/member');
   };
 
   const handleNotesClick = () => {
-    // dispatch(fetchMembers()); // API isteği gönder
-    navigate('/notes'); // Members sayfasına yönlendir
+    navigate('/notes'); 
   };
 
   const handleLogout = () => {
@@ -31,7 +29,6 @@ const NavbarComp = () => {
           <span className="text-2xl font-bold">NoteApp</span>
         </div>
         <div className="hidden md:flex space-x-6">
-          {/* Members linkine onClick ekleyin */}
           <a onClick={handleMembersClick} className="text-white hover:text-gray-300 focus:outline-none focus:ring-0 cursor-pointer">
             Members
           </a>

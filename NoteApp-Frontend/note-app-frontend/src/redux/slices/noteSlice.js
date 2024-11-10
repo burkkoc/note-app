@@ -1,49 +1,60 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import api from '../../Api/api';  // Assuming your API utility is set up like this
+import api from '../../Api/api';  
 
-// AsyncThunk: Fetch all notes from the server
 export const fetchAllNotes = createAsyncThunk(
-    'notes/fetchAll',  // Action type (name) for fetching notes
+    'notes/fetchAll',  
     async (_, { rejectWithValue }) => {
         try {
-            const response = await api.get('/Note/GetAllNotes');  // API call to fetch all notes
-            return response.data;  // Return the response data (list of notes)
+            const response = await api.get('/Note/GetAllNotes'); 
+            return response.data; 
         } catch (error) {
-            // If the request fails, handle error gracefully
             return rejectWithValue(error.response?.data || 'Failed to fetch notes');
         }
     }
 );
 
+export const updateNote = createAsyncThunk(
+    'notes/updateNote',
+    async ({ id, Title, Content }, { dispatch, rejectWithValue }) => {
+      try {
+        const response = await api.patch('/Note/Update', { id, Title, Content  });
+        if (response.status === 200) {
+          await dispatch(fetchAllNotes());
+          return response.data; 
+        }
+        return rejectWithValue('Note update failed');
+      } catch (error) {
+        return rejectWithValue(error.response?.data || 'Note update failed');
+      }
+    }
+  );
+
+
 const initialState = {
-    notes: [],        // Store for notes data
-    loading: false,   // To track the loading state
-    error: null,      // To track any errors that occur
+    notes: [],       
+    loading: false,   
+    error: null,     
 };
 
 const notesSlice = createSlice({
-    name: 'notes',  // Slice name
+    name: 'notes',  
     initialState,
     reducers: {},
     extraReducers: (builder) => {
         builder
-            // Pending case when the request is in progress
             .addCase(fetchAllNotes.pending, (state) => {
                 state.loading = true;
-                state.error = null;  // Reset error on new request
+                state.error = null;  
             })
-            // Fulfilled case when the request is successful
             .addCase(fetchAllNotes.fulfilled, (state, action) => {
-                state.notes = action.payload;  // Set the fetched notes into state
-                state.loading = false;          // Set loading to false after success
+                state.notes = action.payload;  
+                state.loading = false;          
             })
-            // Rejected case when the request fails
             .addCase(fetchAllNotes.rejected, (state, action) => {
-                state.loading = false;  // Set loading to false after failure
-                state.error = action.payload || 'Something went wrong';  // Set the error message
+                state.loading = false;  
+                state.error = action.payload || 'Something went wrong'; 
             });
     },
 });
 
-// Export the reducer for the slice
 export default notesSlice.reducer;

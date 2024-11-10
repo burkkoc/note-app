@@ -8,7 +8,8 @@ return (
     <div className="home-comp-cont">
       
       <div className="flex-1 p-4">
-        <h1>Hello {user.firstName}</h1>
+        <h1>Hello {user.firstName}!</h1>
+        <p>This is your landing page.</p>
       </div>
     </div>
   );
