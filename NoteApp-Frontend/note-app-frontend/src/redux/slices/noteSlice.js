@@ -30,7 +30,7 @@ export const updateNote = createAsyncThunk(
 );
 
 export const deleteNote = createAsyncThunk(
-  "member/deleteNote",
+  "notes/deleteNote",
   async ({ id }, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.delete(`Note/Delete?Id=${id}`);
@@ -46,7 +46,7 @@ export const deleteNote = createAsyncThunk(
 );
 
 export const createNote = createAsyncThunk(
-  "member/createNote",
+  "notes/createNote",
   async ({ formData }, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.post("Note/Create", formData, {

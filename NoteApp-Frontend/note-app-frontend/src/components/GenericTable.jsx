@@ -43,8 +43,7 @@ const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
     ...currentRows,
     ...Array(Math.max(0, emptyRows)).fill({})
   ]
-  const paginate = pageNumber => setCurrentPage(pageNumber)
-  const totalPages = Math.ceil(data.length / rowsPerPage)
+ 
 
   if (!data || data.length === 0) {
     return <p>No entry available</p>
@@ -86,7 +85,7 @@ const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
           PhoneNumber: selectedRow.phoneNumber
         })
       )
-    } else if (pageName === 'Note') {
+    } else if (pageName === 'Notes') {
       dispatch(
         updateNote({
           id: selectedRow.id,
@@ -98,6 +97,8 @@ const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
     setShowEditModal(false)
   }
   const createEntry = () => {
+    console.log(pageName);
+    
     if (pageName === 'Member') {
       setFormData(formData)
       dispatch(
@@ -105,7 +106,7 @@ const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
           formData
         })
       )
-    } else if (pageName === 'Note') {
+    } else if (pageName === 'Notes') {
       setFormData(formData)
       dispatch(
         createNote({
@@ -122,7 +123,7 @@ const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
           id: selectedRow.id
         })
       )
-    } else if (pageName === 'Note') {
+    } else if (pageName === 'Notes') {
       dispatch(
         deleteNote({
           id: selectedRow.id
@@ -142,7 +143,7 @@ const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
           <caption className='p-5 text-lg font-semibold text-left text-gray-300 bg-gray-900 dark:text-white dark:bg-gray-900 rounded-lg mb-3'>
             {pageName !== 'Mynotes' ? pageName : 'My Notes'} List
 
-            {((canCreateMember && pageName == 'Member') || (canCreateOwnNote && pageName == 'Mynotes')) && <button
+            {((canCreateMember && pageName == 'Member') || (canCreateOwnNote && pageName == 'Notes')) && <button
               onClick={() => openCreateModal(data)}
               name='addNewButton'
               className='font-semibold text-gray-300 bg-green-800 hover:bg-green-900 rounded px-4 py-2 shadow-md transition-all ml-8'
@@ -187,7 +188,7 @@ const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
                 <td className='px-6 py-4 text-center bg-gray-800'>
                   {Object.values(member).some(value => value) ? (
                     <>
-                      {shouldShowEditButton &&
+                     
 
                         <button
                           onClick={() => openEditModal(member)}
@@ -196,15 +197,14 @@ const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
                         >
                           Edit
                         </button>
-                      }
-                      {shouldShowDeleteButton &&
+                      
                       <button
                         onClick={() => openDeleteModal(member)}
                         name='deleteButton'
                         className='font-semibold text-gray-300 bg-red-800 hover:bg-red-900 rounded px-4 py-2 shadow-md transition-all ml-2'
                       >
                         Delete
-                      </button>}
+                      </button>
                     </>
                   ) : null}
                 </td>
