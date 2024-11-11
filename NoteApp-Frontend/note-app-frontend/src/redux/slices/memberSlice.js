@@ -9,7 +9,6 @@ export const fetchMembers = createAsyncThunk(
         const response = await api.get('/Member/GetAll');
         return response.data; 
     } catch (error) {
-        console.log(token);
         return rejectWithValue(error.response?.data || 'Fetch failed.');
     }
       

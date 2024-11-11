@@ -6,18 +6,16 @@ import GenericTable from './GenericTable';
 const NotesComp = () => {
     const dispatch = useDispatch();
     const { notes, loading, error } = useSelector((state) => state.notes);
-    const [data, setData] = useState([]);
-
+    const [formData, setFormData] = useState({
+        Title: '',
+        Content: ''
+      });
 
     useEffect(() => {
         dispatch(fetchAllNotes());
     }, [dispatch]);
 
-    useEffect(() => {
-        if (notes) {
-            setData(notes);
-        }
-    }, [notes]);
+  
 
     if (loading) {
         return <div>Loading...</div>;
@@ -32,6 +30,10 @@ const NotesComp = () => {
         <>
             <GenericTable
                 data={notes}
+                loading={loading}
+                pageName={"Note"}
+                formData = {formData}
+                setFormData = {setFormData}
             ></GenericTable>
         </>
     );

@@ -6,7 +6,6 @@ import GenericTable from './GenericTable';
 const MemberComp = () => {
     const dispatch = useDispatch();
     const { members, loading, error } = useSelector((state) => state.members);
-    const [data, setData] = useState([]);
     const [formData, setFormData] = useState({
         FirstName: '',
         LastName: '',
@@ -17,7 +16,6 @@ const MemberComp = () => {
 
     useEffect(() => {
         dispatch(fetchMembers());
-        console.log(members);
         
     }, [dispatch]);
 

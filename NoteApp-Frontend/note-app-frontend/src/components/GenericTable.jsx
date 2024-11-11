@@ -7,6 +7,8 @@ import {
   createMember
 } from '../redux/slices/memberSlice'
 
+import { updateNote, deleteNote, createNote } from '../redux/slices/noteSlice'
+
 const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
   const [currentPage, setCurrentPage] = useState(1)
   const [showEditModal, setShowEditModal] = useState(false)
@@ -16,14 +18,23 @@ const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
   const [selectedRow, setSelectedRow] = useState(null)
   const dispatch = useDispatch()
 
-  const rowsPerPage = 10
+  const rowsPerPage = 5
 
   const indexOfLastRow = currentPage * rowsPerPage
   const indexOfFirstRow = indexOfLastRow - rowsPerPage
-  const currentRows = data.slice(indexOfFirstRow, indexOfLastRow)
+  const currentRows =
+    Array.isArray(data) && data.length > 0
+      ? data.slice(indexOfFirstRow, indexOfLastRow)
+      : []
 
   const emptyRows = rowsPerPage - currentRows.length
-  const rowsToDisplay = [...currentRows, ...Array(emptyRows).fill({})]
+  const rowsToDisplay = [
+    ...currentRows,
+    ...Array(Math.max(0, emptyRows)).fill({})
+  ]
+  const paginate = pageNumber => setCurrentPage(pageNumber)
+  const totalPages = Math.ceil(data.length / rowsPerPage)
+
   if (!data || data.length === 0) {
     return <p>No entry available</p>
   }
@@ -31,7 +42,13 @@ const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
     return <p>Loading table data...</p>
   }
 
-  const headers = Object.keys(data[0]).filter(header => header !== 'id')
+  const headers =
+    Array.isArray(data) && data.length > 0
+      ? Object.keys(data[0]).filter(
+          header => header !== 'id' && header !== 'memberId'
+        ) 
+      : []
+
   const openEditModal = row => {
     setSelectedRow(row)
     setShowEditModal(true)
@@ -58,8 +75,16 @@ const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
           PhoneNumber: selectedRow.phoneNumber
         })
       )
-      setShowEditModal(false)
+    } else if (pageName === 'Note') {
+      dispatch(
+        updateNote({
+          id: selectedRow.id,
+          Content: selectedRow.content,
+          Title: selectedRow.title
+        })
+      )
     }
+    setShowEditModal(false)
   }
   const createEntry = () => {
     if (pageName === 'Member') {
@@ -69,32 +94,45 @@ const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
           formData
         })
       )
-      console.log(formData)
+    } else if (pageName === 'Note') {
+      setFormData(formData)
+      dispatch(
+        createNote({
+          formData
+        })
+      )
     }
   }
 
   const deleteConfirmButton = () => {
-    console.log(selectedRow.id)
-
     if (pageName === 'Member') {
       dispatch(
         deleteMember({
           id: selectedRow.id
         })
       )
-      setShowDeleteModal(false)
+    } else if (pageName === 'Note') {
+      dispatch(
+        deleteNote({
+          id: selectedRow.id
+        })
+      )
     }
+    setShowDeleteModal(false)
   }
 
   return (
     <div className='relative'>
-      <div className='overflow-x-auto bg-gray-800 p-5 rounded-lg shadow-lg mt-5'>
-        <table className='w-full text-sm text-left text-gray-200 dark:text-gray-400 '>
-          <caption className='p-5 text-lg font-semibold text-left text-gray-300 bg-gray-900 dark:text-white dark:bg-gray-900 rounded-lg mb-3 '>
+      <div className='table-container overflow-x-auto bg-gray-800 p-5 rounded-lg shadow-lg mt-5'>
+        <table
+          className='min-w-[500px] max-w-[1500px] text-sm text-left text-gray-200 dark:text-gray-400'
+          style={{ width: '100%', tableLayout: 'fixed' }}
+        >
+          <caption className='p-5 text-lg font-semibold text-left text-gray-300 bg-gray-900 dark:text-white dark:bg-gray-900 rounded-lg mb-3'>
             {pageName} List
             <button
               onClick={() => openCreateModal(data)}
-              name='editButton'
+              name='addNewButton'
               className='font-semibold text-gray-300 bg-green-800 hover:bg-green-900 rounded px-4 py-2 shadow-md transition-all ml-8'
             >
               Add New {pageName}
@@ -111,7 +149,7 @@ const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
             </tr>
           </thead>
           <tbody>
-            {rowsToDisplay.map((member, index) => (
+            {rowsToDisplay.slice(0, 5).map((member, index) => (
               <tr
                 key={index}
                 className='bg-gray-800 border-b dark:bg-gray-900 dark:border-gray-700'
@@ -127,30 +165,32 @@ const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
                         : member[header] === false
                         ? 'Female'
                         : '-'
-                      : member[header] !== undefined
+                      : member[header] !== undefined &&
+                        member[header] !== null &&
+                        member[header] !== ''
                       ? member[header]
                       : '-'}
                   </td>
                 ))}
                 <td className='px-6 py-4 text-center bg-gray-800'>
-                  {
-                    <button
-                      onClick={() => openEditModal(member)}
-                      name='editButton'
-                      className='font-semibold text-gray-300 bg-yellow-700 hover:bg-yellow-900 rounded px-4 py-2 shadow-md transition-all'
-                    >
-                      Edit
-                    </button>
-                  }
-                  {
-                    <button
-                      onClick={() => openDeleteModal(member)}
-                      name='deleteButton'
-                      className='font-semibold text-gray-300 bg-red-800 hover:bg-red-900 rounded px-4 py-2 shadow-md transition-all ml-2'
-                    >
-                      Delete
-                    </button>
-                  }
+                  {Object.values(member).some(value => value) ? (
+                    <>
+                      <button
+                        onClick={() => openEditModal(member)}
+                        name='editButton'
+                        className='font-semibold text-gray-300 bg-yellow-700 hover:bg-yellow-900 rounded px-4 py-2 shadow-md transition-all'
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => openDeleteModal(member)}
+                        name='deleteButton'
+                        className='font-semibold text-gray-300 bg-red-800 hover:bg-red-900 rounded px-4 py-2 shadow-md transition-all ml-2'
+                      >
+                        Delete
+                      </button>
+                    </>
+                  ) : null}
                 </td>
               </tr>
             ))}
@@ -164,27 +204,33 @@ const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
           <div className='absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40'></div>
 
           <div className='relative bg-gray-800 p-5 rounded-lg shadow-lg text-gray-200 w-1/3 z-50'>
-            <h2 className='text-xl font-semibold mb-4'>Edit </h2>
-            {Object.keys(selectedRow || {}).map(
-              key =>
-                (pageName === 'Member'
-                  ? key === 'phoneNumber'
-                  : key !== 'id') && (
-                  <div key={key} className='mb-2 text-left'>
-                    <label className='block text-gray-400'>{key}:</label>
-                    <input
-                      className='w-full px-3 py-2 bg-gray-700 text-gray-200 rounded focus:outline-none'
-                      value={selectedRow[key] || ''}
-                      onChange={e =>
-                        setSelectedRow({
-                          ...selectedRow,
-                          [key]: e.target.value
-                        })
-                      }
-                    />
-                  </div>
-                )
-            )}
+            <h2 className='text-xl font-semibold mb-4'>Edit {pageName}</h2>
+            {Object.keys(selectedRow || {}).map(key => {
+              if (pageName === 'Member' && key !== 'phoneNumber') {
+                return null
+              }
+              if (key === 'memberId' || key === 'memberEmail' || key === 'id') {
+                return null
+              }
+
+              const formattedKey = key.charAt(0).toUpperCase() + key.slice(1)
+
+              return (
+                <div key={key} className='mb-2 text-left'>
+                  <label className='block text-gray-400'>{formattedKey}:</label>
+                  <input
+                    className='w-full px-3 py-2 bg-gray-700 text-gray-200 rounded focus:outline-none'
+                    value={selectedRow[key] || ''}
+                    onChange={e =>
+                      setSelectedRow({
+                        ...selectedRow,
+                        [key]: e.target.value
+                      })
+                    }
+                  />
+                </div>
+              )
+            })}
 
             <div className='mt-4 flex justify-end'>
               <button
@@ -210,31 +256,39 @@ const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
           <div className='absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40'></div>
 
           <div className='relative bg-gray-800 p-5 rounded-lg shadow-lg text-gray-200 w-1/3 z-50'>
-            <h2 className='text-xl font-semibold mb-4 text-red-600'>Delete </h2>
+            <h2 className='text-xl font-semibold mb-4 text-red-600'>Delete</h2>
             <p className='mb-2'>
               Are you sure you want to delete the following record?
             </p>
-            {Object.keys(selectedRow || {}).map(
-              key =>
-                key !== 'id' && (
-                  <div key={key} className='mb-2 text-left'>
-                    <label className='block text-gray-400'>{key}:</label>
-                    <input
-                      className='w-full px-3 py-2 bg-gray-700 text-gray-200 rounded focus:outline-none'
-                      value={
-                        key === 'gender'
-                          ? selectedRow[key] === true
-                            ? 'Male'
-                            : selectedRow[key] === false
-                            ? 'Female'
-                            : ''
-                          : selectedRow[key] || ''
-                      }
-                      disabled
-                    />
-                  </div>
-                )
-            )}
+            {Object.keys(selectedRow || {}).map(key => {
+              if (key === 'memberId' || key === 'memberEmail') {
+                return null 
+              }
+
+              if (key === 'id') {
+                return null
+              }
+              const formattedKey = key.charAt(0).toUpperCase() + key.slice(1)
+
+              return (
+                <div key={key} className='mb-2 text-left'>
+                  <label className='block text-gray-400'>{formattedKey}:</label>
+                  <input
+                    className='w-full px-3 py-2 bg-gray-700 text-gray-200 rounded focus:outline-none'
+                    value={
+                      key === 'gender'
+                        ? selectedRow[key] === true
+                          ? 'Male'
+                          : selectedRow[key] === false
+                          ? 'Female'
+                          : ''
+                        : selectedRow[key] || ''
+                    }
+                    disabled
+                  />
+                </div>
+              )
+            })}
             <div className='mt-4 flex justify-end'>
               <button
                 onClick={() => closeModal(setShowDeleteModal)}
@@ -244,7 +298,7 @@ const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
               </button>
               <button
                 onClick={deleteConfirmButton}
-                className='ml-2 px-4 py-2 bg-red-700 rounded hover:bg-red-800 text-gray-200 mr-2 '
+                className='ml-2 px-4 py-2 bg-red-700 rounded hover:bg-red-800 text-gray-200 mr-2'
               >
                 Delete
               </button>
@@ -259,7 +313,7 @@ const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
           <div className='absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40'></div>
 
           <div className='relative bg-gray-800 p-5 rounded-lg shadow-lg text-gray-200 w-1/3 z-50'>
-            <h2 className='text-xl font-semibold mb-4'>Create User</h2>
+            <h2 className='text-xl font-semibold mb-4'>Create {pageName}</h2>
 
             {Object.keys(formData).map(key =>
               key === 'Gender' ? (
@@ -277,7 +331,6 @@ const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
                         : ''
                     }
                     onChange={e => {
-                      // Seçilen değeri true/false olarak kaydet
                       setFormData({
                         ...formData,
                         [key]: e.target.value === 'Male' ? true : false
