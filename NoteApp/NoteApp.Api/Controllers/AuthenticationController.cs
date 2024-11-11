@@ -44,12 +44,11 @@ namespace NoteApp.Api.Controllers
         }
 
         [HttpPost("AssignMember")]
-        public async Task<IActionResult> AssignMember(string id/*, List<string> claims*/) //front
+        public async Task<IActionResult> AssignMember(string id, List<string> claims) //front
         {
             try
             {
-                List<string> claims = new(); //silinecek
-                claims.Add(CustomClaims.CanCreateMember);
+                //List<string> claims = new(); //silinecek
                 var result = await _mediator.Send(new AssignClaimCommand(id, claims));
                 return Ok("Assign operation is success.");
             }

@@ -29,9 +29,13 @@ namespace NoteApp.Business.Features.Login
         public async Task<LoginResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
             var identity = await _userManager.FindByEmailAsync(request.Email);
+         
+
             if (identity != null && await _userManager.CheckPasswordAsync(identity, request.Password))
             {
                 var member = await _memberReadRepository.GetSingleAsync(m => m.IdentityUserId == identity.Id);
+                if (member.Status == Core.Enums.Status.Passive)
+                    throw new Exception("The user was deleted.");
                 var memberDTO = _mapper.Map<MemberDTO>(member);
                 var token = await _jwtService.GenerateTokenAsync(identity);
                 return new LoginResponse(token, memberDTO);
