@@ -2,7 +2,10 @@
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using NoteApp.Business.Features.Members.Commands.EditMember;
 using NoteApp.Business.Features.Notes.Commands.CreateNote;
+using NoteApp.Business.Features.Notes.Commands.DeleteNote;
+using NoteApp.Business.Features.Notes.Commands.UpdateNote;
 using NoteApp.Business.Features.Notes.Queries.GetAllNotes;
 using NoteApp.Business.Features.Notes.Queries.GetNoteById;
 using NoteApp.Business.Features.Notes.Queries.GetNotesByIdentityId;
@@ -76,6 +79,34 @@ namespace NoteApp.Api.Controllers
             catch (Exception ex)
             {
                 return BadRequest(new { message = "Failed to retrieve notes.", errors = ex.InnerException?.Message ?? ex.Message });
+            }
+        }
+
+        [HttpPatch("Update")]
+        public async Task<IActionResult> Update(NoteUpdateDTO updateDTO)
+        {
+            try
+            {
+                var result = await _mediator.Send(new UpdateNoteCommand(updateDTO));
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Failed to update note.", errors = ex.InnerException?.Message ?? ex.Message });
+            }
+        }
+
+        [HttpDelete("Delete")]
+        public async Task<IActionResult> Delete(Guid Id)
+        {
+            try
+            {
+                var result = await _mediator.Send(new DeleteNoteCommand(Id));
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = "Failed to delete note.", errors = ex.InnerException?.Message ?? ex.Message });
             }
         }
 

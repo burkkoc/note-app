@@ -6,6 +6,8 @@ using NoteApp.Business.Features.Auth.Login;
 using NoteApp.Business.Features.Members.Commands.DeleteMember;
 using NoteApp.Business.Features.Members.Commands.EditMember;
 using NoteApp.Business.Features.Notes.Commands.CreateNote;
+using NoteApp.Business.Features.Notes.Commands.DeleteNote;
+using NoteApp.Business.Features.Notes.Commands.UpdateNote;
 using NoteApp.Business.Features.Users.Commands;
 using NoteApp.Core.Auth;
 using NoteApp.Core.Enums;
@@ -48,7 +50,7 @@ namespace NoteApp.Business.Features.Members.Pipelines
                 throw new UnauthorizedAccessException("You do NOT have permission to delete members.");
             }
 
-            if (request is UpdateMemberCommand && !user.HasClaim(c => c.Type == CustomClaims.CanEditMember && c.Value == ClaimStates.Yes.ToString()))
+            if (request is UpdateNoteCommand && !user.HasClaim(c => c.Type == CustomClaims.CanEditMember && c.Value == ClaimStates.Yes.ToString()))
             {
                 throw new UnauthorizedAccessException("You do NOT have permission to edit members.");
             }
@@ -71,6 +73,15 @@ namespace NoteApp.Business.Features.Members.Pipelines
             if (request is UnassignClaimCommand && !user.HasClaim(c => c.Type == CustomClaims.CanRemovePermission && c.Value == ClaimStates.Yes.ToString()))
             {
                 throw new UnauthorizedAccessException("You do NOT have permission to unassign members.");
+            }
+
+            if (request is UpdateNoteCommand && !user.HasClaim(c => c.Type == CustomClaims.CanEditOwnNote && c.Value == ClaimStates.Yes.ToString()))
+            {
+                throw new UnauthorizedAccessException("You do NOT have permission to edit your own notes.");
+            }
+            if(request is DeleteNoteCommand && !user.HasClaim(c => c.Type == CustomClaims.CanDeleteOwnNote && c.Value == ClaimStates.Yes.ToString()))
+            {
+                throw new UnauthorizedAccessException("You do NOT have permission to delete your own note.");
             }
 
             return await next();
