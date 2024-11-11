@@ -93,7 +93,7 @@ const notesSlice = createSlice({
       })
       .addCase(fetchAllNotes.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || "Something went wrong";
+        state.error = action.payload?.message || action.payload || 'An error occurred.';
       });
     builder
       .addCase(updateNote.pending, (state) => {
