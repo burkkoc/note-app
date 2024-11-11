@@ -9,22 +9,21 @@ import {  faUser, faLock } from "@fortawesome/free-solid-svg-icons";
 
 
 const Login = () => {
-  const { loading, error, user} = useSelector((state) => state.auth);
+  const { loading, error, user, claims} = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   
 
-
   const handleSubmit = async (e) => {
     
     e.preventDefault();
     const action =await dispatch(loginUser({ email, password }));
     if (action.type === 'auth/loginUser/fulfilled') {
+      
+
       navigate('/home');  
-    } else {
-      console.log('Login failed');
     }
   };
 
@@ -74,7 +73,6 @@ const Login = () => {
 
 
                  {/* {errors.password != '' && <p className="error-message">{errors.password}</p>} */}
-                 {/* {(!errors.password === '' && !errors.email === '') && errors.credentials && (<p className="error-message">{errors.credentials}</p>)} */}
                 <button
                   type="submit"
                   disabled={loading}
@@ -82,6 +80,7 @@ const Login = () => {
                   >
                     {loading ? 'Logging..' : 'Login'}
                 </button>
+                    {error && (<p className="error-message">An error occured: {error.message}</p>)}
                 <p className="login__resendpassword">
                   &nbsp;<a href="#">Forgot Password? Re-send.</a>
                 </p>

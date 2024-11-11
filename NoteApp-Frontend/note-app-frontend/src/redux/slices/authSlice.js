@@ -5,15 +5,15 @@ import api from '../../Api/api';
 
 
 function decodeTokenFunc(token) {
-  if(token && token !== undefined){
-    console.log(token);
+  if (token && token !== undefined) {
+    
     const base64Url = token.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
     const jsonPayload = decodeURIComponent(
       atob(base64)
-      .split('')
-      .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
-      .join('')
+        .split('')
+        .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+        .join('')
     );
     return JSON.parse(jsonPayload);
   }
@@ -21,17 +21,17 @@ function decodeTokenFunc(token) {
 
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
-  async ({ email, password }, {dispatch, rejectWithValue }) => {
+  async ({ email, password }, { dispatch, rejectWithValue }) => {
     try {
       const response = await api.post('/Authentication/Login', { email, password });
       if (response.status === 200) {
         dispatch(decodeToken(response.data.token || null));
-        
-        return response.data; 
+
+        return response.data;
       }
       return rejectWithValue('Login failed');
     } catch (error) {
-      return rejectWithValue(error.response?.data || 'Giriş başarısız oldu.');
+      return rejectWithValue(error.response?.data || 'Login failed');
     }
   }
 );
@@ -43,8 +43,7 @@ export const decodeToken = createAsyncThunk(
       const claims = decodeTokenFunc(token);
       return claims;
     } catch (error) {
-      console.error("Decode işlemi sırasında hata: ", error);
-      return rejectWithValue('Token geçersiz veya decode edilemedi');
+      return rejectWithValue('Token is NOT valid.');
     }
   }
 );
@@ -52,8 +51,8 @@ export const decodeToken = createAsyncThunk(
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    user:  JSON.parse(localStorage.getItem('user')) || null,
-    token: localStorage.getItem('token') || null, 
+    user: JSON.parse(localStorage.getItem('user')) || null,
+    token: localStorage.getItem('token') || null,
     claims: null,
     loading: false,
     error: null,
@@ -64,7 +63,8 @@ const authSlice = createSlice({
       state.token = null;
       state.claims = null;
       localStorage.removeItem('user');
-      localStorage.removeItem('token'); 
+      localStorage.removeItem('token');
+      localStorage.removeItem('filteredClaims');
     },
   },
   extraReducers: (builder) => {
@@ -85,9 +85,16 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       });
-      builder
+    builder
       .addCase(decodeToken.fulfilled, (state, action) => {
         state.claims = action.payload;
+        const filteredClaims = Object.entries(state.claims || {})
+          .filter(([key]) => key.startsWith("Can"))
+          .map(([key]) => key);
+
+        if (filteredClaims.length > 0) {
+          localStorage.setItem('filteredClaims', JSON.stringify(filteredClaims));
+        }
       })
       .addCase(decodeToken.rejected, (state, action) => {
         state.error = action.payload;

@@ -29,7 +29,7 @@ const NavbarComp = () => {
     <nav className="bg-gray-900 text-white shadow-lg py-4">
       <div className="container mx-auto flex items-center justify-between px-6" >
         <div className="flex items-center space-x-4 cursor-pointer"onClick={handleHomeRedirect}>
-          <img src="../../public/memberLogoMale.png" alt="Logo" className="h-8 w-auto" />
+          <img src="../../public/memberLogoMale.png" alt="Logo" className="h-12 w-auto" />
           <span className="text-2xl font-bold">NoteApp</span>
         </div>
         {token && <div className="hidden md:flex space-x-6">
