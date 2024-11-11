@@ -1,0 +1,8 @@
+.sidebar-icon {
+    color: gray; /* Başlangıçta gri */
+    transition: color 0.2s; /* Geçiş efekti */
+  }
+
+  .sidebar-icon:hover {
+    color: gray; /* Hover sırasında siyah olur */
+  }

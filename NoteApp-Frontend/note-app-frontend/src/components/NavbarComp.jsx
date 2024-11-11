@@ -7,19 +7,8 @@ import { useNavigate } from 'react-router-dom';
 const NavbarComp = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const {user } = useSelector(state => state.auth);
 
-  const handleMembersClick = () => {
-    navigate('/member');
-  };
-
-  const handleNotesClick = () => {
-    navigate('/notes'); 
-  };
-
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate('/login');
-  };
   const handleHomeRedirect = () => {
     navigate('/home'); 
   };
@@ -33,15 +22,8 @@ const NavbarComp = () => {
           <span className="text-2xl font-bold">NoteApp</span>
         </div>
         {token && <div className="hidden md:flex space-x-6">
-          <a onClick={handleMembersClick} className="text-gray-400 hover:text-gray-200 hover:no-underline transition-colors duration-200 cursor-pointer">
-            Members
-          </a>
-          <a onClick={handleNotesClick} className="text-gray-400 hover:text-gray-200 hover:no-underline transition-colors duration-200 cursor-pointer">
-            Notes
-          </a>
-          <button onClick={handleLogout} className="text-gray-400 hover:text-gray-200 transition-colors duration-200">
-            Logout
-          </button>
+
+          Logged in as {user.firstName} {user.firstName !== user.lastName ? user.lastName : ""}
         </div>}
         <div className="md:hidden">
           <button className="text-white focus:outline-none">

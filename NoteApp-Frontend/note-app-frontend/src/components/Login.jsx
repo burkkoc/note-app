@@ -9,7 +9,7 @@ import {  faUser, faLock } from "@fortawesome/free-solid-svg-icons";
 
 
 const Login = () => {
-  const { loading, error, user, claims} = useSelector((state) => state.auth);
+  const { loading, error, user} = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');

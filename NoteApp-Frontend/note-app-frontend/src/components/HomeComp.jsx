@@ -6,7 +6,7 @@ const Home = () => {
 
   return (
     <div className="home-comp-cont">
-      <div className="flex-1 p-4">
+      <div className="flex-1 p-4 text-gray-200">
         <h1>Hello {user.firstName}!</h1>
         
         <p>This is your landing page.</p>

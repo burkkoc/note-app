@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import '../assets/styles/GenericTable.css'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import {
   updateMember,
   deleteMember,
@@ -14,7 +14,18 @@ const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
   const [showEditModal, setShowEditModal] = useState(false)
   const [showCreateModal, setShowCreateModal] = useState(false)
   const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const { filteredClaims } = useSelector(state => state.auth);
+  const canCreateMember = filteredClaims.includes("CanCreateMember");
+  const canCreateOwnNote = filteredClaims.includes("CanCreateOwnNote");
+  const canEditMember = filteredClaims.includes("CanEditMember");
+  const canDeleteOwnNote = "CanDeleteOwnNote";
+  const canEditOwnNote = "CanEditOwnNote";
+  const canDeleteAnyNote = "CanDeleteAnyNote";
+  const canDeleteMember = "CanDeleteMember";
+  const shouldShowEditButton = (canEditOwnNote && pageName === "Mynotes") || (canEditMember && pageName === "Member");
+  const shouldShowDeleteButton = (canDeleteOwnNote && pageName === "Mynotes") || (canDeleteMember && pageName === "Member") || (canDeleteAnyNote && pageName === "Notes");
 
+ 
   const [selectedRow, setSelectedRow] = useState(null)
   const dispatch = useDispatch()
 
@@ -45,8 +56,8 @@ const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
   const headers =
     Array.isArray(data) && data.length > 0
       ? Object.keys(data[0]).filter(
-          header => header !== 'id' && header !== 'memberId'
-        ) 
+        header => header !== 'id' && header !== 'memberId'
+      )
       : []
 
   const openEditModal = row => {
@@ -129,14 +140,15 @@ const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
           style={{ width: '100%', tableLayout: 'fixed' }}
         >
           <caption className='p-5 text-lg font-semibold text-left text-gray-300 bg-gray-900 dark:text-white dark:bg-gray-900 rounded-lg mb-3'>
-            {pageName} List
-            <button
+            {pageName !== 'Mynotes' ? pageName : 'My Notes'} List
+
+            {((canCreateMember && pageName == 'Member') || (canCreateOwnNote && pageName == 'Mynotes')) && <button
               onClick={() => openCreateModal(data)}
               name='addNewButton'
               className='font-semibold text-gray-300 bg-green-800 hover:bg-green-900 rounded px-4 py-2 shadow-md transition-all ml-8'
             >
-              Add New {pageName}
-            </button>
+              Add New {pageName !== 'Mynotes' ? pageName : 'Note'}
+            </button>}
           </caption>
           <thead className='text-xs text-gray-500 uppercase bg-gray-900 dark:bg-gray-800 dark:text-gray-400'>
             <tr>
@@ -163,32 +175,36 @@ const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
                       ? member[header] === true
                         ? 'Male'
                         : member[header] === false
-                        ? 'Female'
-                        : '-'
+                          ? 'Female'
+                          : '-'
                       : member[header] !== undefined &&
                         member[header] !== null &&
                         member[header] !== ''
-                      ? member[header]
-                      : '-'}
+                        ? member[header]
+                        : '-'}
                   </td>
                 ))}
                 <td className='px-6 py-4 text-center bg-gray-800'>
                   {Object.values(member).some(value => value) ? (
                     <>
-                      <button
-                        onClick={() => openEditModal(member)}
-                        name='editButton'
-                        className='font-semibold text-gray-300 bg-yellow-700 hover:bg-yellow-900 rounded px-4 py-2 shadow-md transition-all'
-                      >
-                        Edit
-                      </button>
+                      {shouldShowEditButton &&
+
+                        <button
+                          onClick={() => openEditModal(member)}
+                          name='editButton'
+                          className='font-semibold text-gray-300 bg-yellow-700 hover:bg-yellow-900 rounded px-4 py-2 shadow-md transition-all'
+                        >
+                          Edit
+                        </button>
+                      }
+                      {shouldShowDeleteButton &&
                       <button
                         onClick={() => openDeleteModal(member)}
                         name='deleteButton'
                         className='font-semibold text-gray-300 bg-red-800 hover:bg-red-900 rounded px-4 py-2 shadow-md transition-all ml-2'
                       >
                         Delete
-                      </button>
+                      </button>}
                     </>
                   ) : null}
                 </td>
@@ -262,7 +278,7 @@ const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
             </p>
             {Object.keys(selectedRow || {}).map(key => {
               if (key === 'memberId' || key === 'memberEmail') {
-                return null 
+                return null
               }
 
               if (key === 'id') {
@@ -280,8 +296,8 @@ const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
                         ? selectedRow[key] === true
                           ? 'Male'
                           : selectedRow[key] === false
-                          ? 'Female'
-                          : ''
+                            ? 'Female'
+                            : ''
                         : selectedRow[key] || ''
                     }
                     disabled
@@ -327,8 +343,8 @@ const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
                       formData[key] === true
                         ? 'Male'
                         : formData[key] === false
-                        ? 'Female'
-                        : ''
+                          ? 'Female'
+                          : ''
                     }
                     onChange={e => {
                       setFormData({
@@ -390,11 +406,10 @@ const GenericTable = ({ data, loading, pageName, formData, setFormData }) => {
             <button
               key={index}
               onClick={() => setCurrentPage(index + 1)}
-              className={`px-4 py-2 mx-1 ${
-                currentPage === index + 1
+              className={`px-4 py-2 mx-1 ${currentPage === index + 1
                   ? 'bg-yellow-500 text-black'
                   : 'bg-gray-700 text-white'
-              } rounded hover:bg-gray-600`}
+                } rounded hover:bg-gray-600`}
             >
               {index + 1}
             </button>

@@ -2,15 +2,26 @@ import React, { useState, useEffect, useRef } from "react";
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllNotes } from '../redux/slices/noteSlice';
 import GenericTable from './GenericTable';
+import { Navigate, useNavigate } from "react-router-dom";
 
-const NotesComp = () => {
+
+const NotesComp = ({pageName}) => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
+
     const { notes, loading, error } = useSelector((state) => state.notes);
     const [formData, setFormData] = useState({
         Title: '',
         Content: ''
       });
 
+      useEffect(() => {
+        if (error && error.includes('note')) {
+          navigate('/accessdenied');  
+        }
+      }, [error, navigate]);
+
+      
     useEffect(() => {
         dispatch(fetchAllNotes());
     }, [dispatch]);
@@ -31,7 +42,7 @@ const NotesComp = () => {
             <GenericTable
                 data={notes}
                 loading={loading}
-                pageName={"Note"}
+                pageName={pageName}
                 formData = {formData}
                 setFormData = {setFormData}
             ></GenericTable>

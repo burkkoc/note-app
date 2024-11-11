@@ -1,0 +1,15 @@
+.permission-select {
+    background-color: #2d3748 !important;
+    color: #edf2f7 !important;
+  }
+  
+  .permission-select option {
+    background-color: #2d3748 !important;
+    color: #edf2f7 !important;
+  }
+  
+  .permission-select:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.6);
+  }
+  
