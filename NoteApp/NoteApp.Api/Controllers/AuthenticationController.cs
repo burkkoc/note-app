@@ -44,12 +44,11 @@ namespace NoteApp.Api.Controllers
         }
 
         [HttpPost("AssignMember")]
-        public async Task<IActionResult> AssignMember(string id, List<string> claims) //front
+        public async Task<IActionResult> AssignMember([FromBody] AssignClaimDTO assignClaimDTO)
         {
             try
             {
-                //List<string> claims = new(); //silinecek
-                var result = await _mediator.Send(new AssignClaimCommand(id, claims));
+                var result = await _mediator.Send(new AssignClaimCommand(assignClaimDTO));
                 return Ok("Assign operation is success.");
             }
             catch (Exception ex)

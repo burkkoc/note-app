@@ -14,27 +14,35 @@ namespace NoteApp.Business.Features.Auth.Claims.AssignClaim
     public class AssignClaimHandler : IRequestHandler<AssignClaimCommand, bool>
     {
         private readonly UserManager<IdentityUser> _userManager;
-        public AssignClaimHandler(UserManager<IdentityUser> userManager)
+        private readonly IMemberReadRepository _memberReadRepository;
+        public AssignClaimHandler(UserManager<IdentityUser> userManager, IMemberReadRepository memberReadRepository)
         {
             _userManager = userManager;
+            _memberReadRepository = memberReadRepository;
         }
         public async Task<bool> Handle(AssignClaimCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                var member = await _userManager.FindByIdAsync(request.Id);
-                if (member == null)
+                var member = await _memberReadRepository.GetByIdAsync(request.Id);
+                var identityUser = await _userManager.FindByIdAsync(member.IdentityUserId);
+                if (identityUser == null)
                     throw new Exception("Member could not found.");
 
-                var existingClaim = await _userManager.GetClaimsAsync(member);
-                
+                var existingClaim = await _userManager.GetClaimsAsync(identityUser);
+
                 foreach (var claim in CustomClaims.CustomClaimList)
                 {
-                    if (!existingClaim.Any(c => c.Type == claim.Type && c.Value == claim.Value) && request.ClaimsList.Contains(claim.Type.ToString()))
+                    if (!existingClaim.Any(c => c.Type == claim.Type && c.Value == claim.Value) && request.ClaimName == claim.Type.ToString())
                     {
-                        await _userManager.AddClaimAsync(member, claim);
+                        await _userManager.AddClaimAsync(identityUser, claim);
                     }
                 }
+                if (request.ClaimName == CustomClaims.CanDeleteMember || request.ClaimName == CustomClaims.CanCreateMember || request.ClaimName == CustomClaims.CanEditMember)
+                    await _userManager.AddClaimAsync(identityUser, CustomClaims.CustomClaimList.FirstOrDefault(c => c.Type == CustomClaims.CanReadAnyMember) ?? throw new ArgumentNullException());
+
+                if (request.ClaimName == CustomClaims.CanDeleteAnyNote)
+                    await _userManager.AddClaimAsync(identityUser, CustomClaims.CustomClaimList.FirstOrDefault(c => c.Type == CustomClaims.CanReadAnyNote) ?? throw new ArgumentNullException());
 
                 return true;
             }
