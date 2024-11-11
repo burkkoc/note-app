@@ -93,7 +93,7 @@ const memberSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchMembers.rejected, (state, action) => {
-        state.error = action.payload || 'An error occured.';
+        state.error = action.payload?.message || action.payload || 'An error occurred.';
         state.loading = false;
       });
       builder
